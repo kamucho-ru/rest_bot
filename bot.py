@@ -4,8 +4,6 @@ from telebot import types
 from data import *
 from settings import *
 
-DEBUG = True
-
 lang = None
 curr_menu = None
 cart = {}
