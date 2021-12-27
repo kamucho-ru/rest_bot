@@ -60,10 +60,9 @@ def get_concrete_data(crnt, default=menu):
 def track_and_clear_messages(message, and_clear=True):
     global messages
     not_inserted = True
-    logger(
-        f'track message "{message.text}" ({message.id}), '
-        f'already there: [{[(m.text, m.id) for m in messages]}]'
-    )
+    logger('track message "{}" ({}), already there: [{}]'.format(
+        message.text, message.id, [(m.text, m.id) for m in messages]
+    ))
     for m in messages:
         if m.id == message.id:
             not_inserted = False
@@ -72,7 +71,9 @@ def track_and_clear_messages(message, and_clear=True):
             try:
                 bot.delete_message(m.chat.id, m.id)
             except Exception:
-                logger(f'EXCEPTION WARNING while deleting message "{m.text}" ({m.id})')
+                logger('EXCEPTION WARNING while deleting message "{}" ({}): {}'.format(
+                    m.text, m.id, e
+                ))
             messages.remove(m)
 
     if not_inserted:
