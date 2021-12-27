@@ -152,7 +152,7 @@ def show_menu(message, show='menu'):
         keyboard = types.InlineKeyboardMarkup()
         item_key = types.InlineKeyboardButton(
             text=get_translation('Add 1'),
-            callback_data=f'order_{curr_menu}'
+            callback_data='order_' + curr_menu
         )
         keyboard.add(item_key)
 
@@ -161,7 +161,7 @@ def show_menu(message, show='menu'):
                 if cart[i][3] > 0:
                     item_key = types.InlineKeyboardButton(
                         text=get_translation('Remove 1'),
-                        callback_data=f'remove_order_{curr_menu}'
+                        callback_data='remove_order_' + curr_menu
                     )
                     keyboard.add(item_key)
 
@@ -218,7 +218,9 @@ def check_lang(user_id):
         question = '?'
         m_ = bot.send_message(user_id, text=question, reply_markup=keyboard)
         track_and_clear_messages(m_, False)
-    logger(f'Language check for {user_id}: {True if m_ else False}')
+    logger('Language check for {}: {}'.format(
+        user_id, True if m_ else False
+    ))
     return m_
 
 
@@ -393,7 +395,7 @@ def callback_worker(call):
             show_type = 'cart'
         show_menu(call.message, show_type)
     except Exception as e:
-        logger(f'Callback exception! + {e}')
+        logger('Callback exception! + ' + e)
 
 
 bot.polling(none_stop=True, interval=0)
