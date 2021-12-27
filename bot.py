@@ -68,7 +68,7 @@ def track_and_clear_messages(message, and_clear=True):
         if and_clear:
             try:
                 bot.delete_message(m.chat.id, m.id)
-            except Exception:
+            except Exception as e:
                 logger('EXCEPTION WARNING while deleting message "{}" ({}): {}'.format(
                     m.text, m.id, e
                 ))
@@ -395,7 +395,7 @@ def callback_worker(call):
             show_type = 'cart'
         show_menu(call.message, show_type)
     except Exception as e:
-        logger('Callback exception! + ' + e)
+        logger('Callback exception! + ' + str(e))
 
 
 bot.polling(none_stop=True, interval=0)
