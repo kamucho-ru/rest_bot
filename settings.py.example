@@ -2,6 +2,6 @@ DEBUG = True
 
 token = 'secret:token'
 
-manager_ids = [
+managers = [
     12345,
 ]

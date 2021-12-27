@@ -1,26 +1,42 @@
 import telebot
 from telebot import types
 
-from data import *
-from settings import *
+from data import langs, menu, translations  # noqa
+from settings import DEBUG, managers, token  # noqa
 
-lang = None
-curr_menu = None
-cart = {}
+# searate carts for users
+cart = {
+  # 'user_id': {
+  #     'cart': {},
+  #     'order_type': {},
+  #     'pay_type': {},
+  #     'comments': {},
+  # }
+}
 
+lang = {
+    # 'user_id': 'smth'
+}
+curr_menu = {
+    # 'user_id': 'smth'
+}
+
+# order_type
 REST = 'REST'
 AWAY = 'AWAY'
 DLVR = 'DLVR'
-cart_type = REST
 
+# pay_type
 CASH = 'CASH'
 PHPE = 'PHNE'
-pay_type = None
 
-messages = []
+messages = {
+    # 'user_id': []
+}
 
 
 bot = telebot.TeleBot(token)
+
 
 def logger(message):
     global DEBUG
@@ -29,18 +45,20 @@ def logger(message):
     # else log somewhere else
 
 
-def reset_settings():
+def reset_settings(user_id, soft=False):
     global lang, curr_menu, cart
-    lang = None
-    curr_menu = None
-    cart = {}
+    if not soft:
+        lang[user_id] = None
+    curr_menu[user_id] = None
+    del cart[user_id]
 
 
-def get_translation(s):
+def get_translation(s, user_id):
     global lang, translations
-    if lang == 'eng':
+    current_language = lang.get(user_id, 'eng')
+    if current_language == 'eng':
         return s
-    return translations.get(lang, {}).get(s, s)
+    return translations.get(current_language, {}).get(s, s)
 
 
 def get_concrete_data(crnt, default=menu):
@@ -57,11 +75,12 @@ def get_concrete_data(crnt, default=menu):
 
 def track_and_clear_messages(message, and_clear=True):
     global messages
+    current_messages = messages[message.chat.id]
     not_inserted = True
     logger('track message "{}" ({}), already there: [{}]'.format(
-        message.text, message.id, [(m.text, m.id) for m in messages]
+        message.text, message.id, [(m.text, m.id) for m in current_messages]
     ))
-    for m in messages:
+    for m in current_messages:
         if m.id == message.id:
             not_inserted = False
 
@@ -72,16 +91,30 @@ def track_and_clear_messages(message, and_clear=True):
                 logger('EXCEPTION WARNING while deleting message "{}" ({}): {}'.format(
                     m.text, m.id, e
                 ))
-            messages.remove(m)
+            current_messages.remove(m)
 
     if not_inserted:
-        messages.append(message)
+        current_messages.append(message)
+
+
+def get_current_cart(user_id):
+    global cart, REST
+
+    if user_id not in cart:
+        cart[user_id] = {
+            'cart': {},
+            'order_type': REST,
+            'pay_type': None,
+        }
+
+    return cart[user_id]
 
 
 def show_menu(message, show='menu'):
     logger('showing menu')
     global lang, curr_menu, menu, cart
     messages_stack = []
+    current_cart = get_current_cart(message.chat.id)
 
     def make_keyboard(current):
         keyboard = types.InlineKeyboardMarkup()
@@ -104,7 +137,7 @@ def show_menu(message, show='menu'):
         if current:
             keyboard.add(
                 types.InlineKeyboardButton(
-                    text=get_translation('Go to top menu'),
+                    text=get_translation('Go to top menu', message.chat.id),
                     callback_data='open_menu'
                 )
             )
@@ -120,24 +153,26 @@ def show_menu(message, show='menu'):
     if show == 'cart':
         # show cart content
         keyboard = types.InlineKeyboardMarkup()
-        if cart:
-            for c in cart:
-                item_key = types.InlineKeyboardButton(
-                    text=get_translation('{} [{}] * {} = {} rs.').format(
-                        c, cart[c][0], cart[c][3], cart[c][2]*cart[c][3]
-                    ),
-                    callback_data='remove_order_{}'.format(cart[c][4]))
-                keyboard.add(item_key)
+        for c in current_cart['cart']:
+            item_key = types.InlineKeyboardButton(
+                text=get_translation('{} [{}] * {} = {} rs.', message.chat.id).format(
+                    c,
+                    current_cart['cart'][c][0],
+                    current_cart['cart'][c][3],
+                    current_cart['cart'][c][2] * current_cart['cart'][c][3]
+                ),
+                callback_data='remove_order_{}'.format(current_cart['cart'][c][4]))
+            keyboard.add(item_key)
         item_key = types.InlineKeyboardButton(
-            text=get_translation('Proceed to order'),
+            text=get_translation('Proceed to order', message.chat.id),
             callback_data='order_proceed_2')
         keyboard.add(item_key)
 
     elif show == 'product':
         # show info about product and order buttons
-        data = get_concrete_data(curr_menu)
+        data = get_concrete_data(curr_menu.get(message.chat.id))
         text = '***___{}___***</b>\n{}, {} rs.'.format(
-            curr_menu.split(':')[-2],
+            curr_menu.get(message.chat.id).split(':')[-2],
             data[0],
             data[2]
         )
@@ -151,49 +186,49 @@ def show_menu(message, show='menu'):
 
         keyboard = types.InlineKeyboardMarkup()
         item_key = types.InlineKeyboardButton(
-            text=get_translation('Add 1'),
-            callback_data='order_' + curr_menu
+            text=get_translation('Add 1', message.chat.id),
+            callback_data='order_' + curr_menu.get(message.chat.id)
         )
         keyboard.add(item_key)
 
-        for i in cart:
-            if cart[i][0] == data[0] and cart[i][2] == data[2]:
-                if cart[i][3] > 0:
+        for i in current_cart['cart']:
+            if current_cart['cart'][i][0] == data[0] and current_cart['cart'][i][2] == data[2]:
+                if current_cart['cart'][i][3] > 0:
                     item_key = types.InlineKeyboardButton(
-                        text=get_translation('Remove 1'),
-                        callback_data='remove_order_' + curr_menu
+                        text=get_translation('Remove 1', message.chat.id),
+                        callback_data='remove_order_' + curr_menu.get(message.chat.id)
                     )
                     keyboard.add(item_key)
 
-    else: #  if show == 'menu':
+    else:  # if show == 'menu':
         # show current menu
-        keyboard = make_keyboard(curr_menu)
+        keyboard = make_keyboard(curr_menu.get(message.chat.id))
 
-    if cart and show != 'cart':
+    if current_cart['cart'] and show != 'cart':
         cart_items = 0
         cart_price = 0
-        for c in cart:
-            cart_items += int(cart[c][3])
-            cart_price += int(cart[c][3]) * int(cart[c][2])
+        for c in current_cart['cart']:
+            cart_items += int(current_cart['cart'][c][3])
+            cart_price += int(current_cart['cart'][c][3]) * int(current_cart['cart'][c][2])
         item_key = types.InlineKeyboardButton(
-            text=get_translation('Cart: {} items = {} rs.').format(cart_items, cart_price),
+            text=get_translation('Cart: {} items = {} rs.', message.chat.id).format(cart_items, cart_price),
             callback_data='order_proceed'
         )
         keyboard.add(item_key)
 
     # Назад или сразу полное меню
-    if curr_menu:
+    if curr_menu.get(message.chat.id):
         item_key = types.InlineKeyboardButton(
-            text=get_translation('<< back'),
+            text=get_translation('<< back', message.chat.id),
             callback_data='go_back'
         )
         keyboard.add(item_key)
 
-    question = get_translation('Please select ')
-    if curr_menu:
-        question = curr_menu.lower().replace(':', ' > ')
+    question = get_translation('Please select ', message.chat.id)
+    if curr_menu.get(message.chat.id):
+        question = curr_menu.get(message.chat.id).lower().replace(':', ' > ')
     if show == 'cart':
-        question = get_translation('Select positions for delete or proceed to order')
+        question = get_translation('Select positions for delete or proceed to order', message.chat.id)
 
     track_and_clear_messages(message)
 
@@ -207,13 +242,14 @@ def show_menu(message, show='menu'):
 
 
 def check_lang(user_id):
-    global lang
+    global lang, langs
     m_ = False
-    if not lang:
+    current_language = lang.get(user_id)
+    if not current_language:
         keyboard = types.InlineKeyboardMarkup()
 
-        for lang, call in langs:
-            lang_key = types.InlineKeyboardButton(text=lang, callback_data=call)
+        for lang_name, call in langs:
+            lang_key = types.InlineKeyboardButton(text=lang_name, callback_data=call)
             keyboard.add(lang_key)
         question = '?'
         m_ = bot.send_message(user_id, text=question, reply_markup=keyboard)
@@ -227,23 +263,18 @@ def check_lang(user_id):
 @bot.message_handler(content_types=['text'])  # ['text', 'document', 'audio']
 def get_text_messages(message):
     logger('message received')
-    global lang, DEBUG
+    global DEBUG
 
     track_and_clear_messages(message)
 
     if message.text == '/clear':
-        reset_settings()
+        reset_settings(message.chat.id)
 
     if DEBUG:
-        known_ids = [
-            NICK_ID, UZBEK_ID,
-            488657210, #  Liza
-        ]
-        if message.chat.id not in known_ids:
-            bot.send_message(NICK_ID, text='new customer {} {}'.format(
-                message.from_user.id, message.from_user
-            ))
-            print('send to', message.chat.id)
+        bot.send_message(managers[0], text='new customer {} {}'.format(
+            message.from_user.id, message.from_user
+        ))
+        print('send to', message.chat.id)
 
     if not check_lang(message.chat.id):
         show_menu(message)
@@ -255,27 +286,29 @@ def callback_worker(call):
         logger('callback_worker from {} : {} [{}]'.format(
             call.message.chat.username, call.data, call.message.text
         ))
-        global lang, curr_menu, cart, cart_type
+        global lang, curr_menu, cart
         show_type = 'menu'
+
+        current_cart = get_current_cart(call.message.chat.id)
 
         check_lang(call.message.chat.id)
 
         if call.data.startswith('set_') and call.data.endswith('_lang'):
             # set language
-            lang = call.data[4:-5]
+            lang[call.message.chat.id] = call.data[4:-5]
 
         elif call.data == 'open_menu':
             # Show top
-            curr_menu = None
+            curr_menu[call.message.chat.id] = None
 
         elif call.data.startswith('open_menu_'):
             # show submenu
-            curr_menu = call.data[10:]
+            curr_menu[call.message.chat.id] = call.data[10:]
 
         elif call.data.startswith('open_item_'):
             # show product info
             show_type = 'product'
-            curr_menu = call.data[10:]
+            curr_menu[call.message.chat.id] = call.data[10:]
 
         elif call.data == 'order_proceed':
             show_type = 'cart'
@@ -284,19 +317,19 @@ def callback_worker(call):
         elif call.data == 'order_proceed_2':
             keyboard = types.InlineKeyboardMarkup()
 
-            item_key = types.InlineKeyboardButton(text=get_translation('Order at restaurant'),
+            item_key = types.InlineKeyboardButton(text=get_translation('Order at restaurant', call.message.chat.id),
                                                   callback_data='order_proceed_restaurant')
             keyboard.add(item_key)
 
-            item_key = types.InlineKeyboardButton(text=get_translation('Takeaway from restaurant'),
+            item_key = types.InlineKeyboardButton(text=get_translation('Takeaway from restaurant', call.message.chat.id),
                                                   callback_data='order_proceed_takeaway')
             keyboard.add(item_key)
 
-            item_key = types.InlineKeyboardButton(text=get_translation('Delivery'),
+            item_key = types.InlineKeyboardButton(text=get_translation('Delivery', call.message.chat.id),
                                                   callback_data='order_proceed_delivery')
             keyboard.add(item_key)
 
-            text = get_translation('Choose order type')
+            text = get_translation('Choose order type', call.message.chat.id)
 
             m_ = bot.send_message(call.message.chat.id, text=text, reply_markup=keyboard)
             track_and_clear_messages(m_)
@@ -307,24 +340,24 @@ def callback_worker(call):
             'order_proceed_restaurant'
         ]:
             if call.data == 'order_proceed_delivery':
-                cart_type = DLVR
+                current_cart['order_type'] = DLVR
                 # если доставка - спросить локацию
             elif call.data == 'order_proceed_takeaway':
-                cart_type = AWAY
+                current_cart['order_type'] = AWAY
 
             # show payment options
             # способ оплаты - кэш/phonepe
             keyboard = types.InlineKeyboardMarkup()
 
-            item_key = types.InlineKeyboardButton(text=get_translation('Cash'),
+            item_key = types.InlineKeyboardButton(text=get_translation('Cash', call.message.chat.id),
                                                   callback_data='order_proceed_cash')
             keyboard.add(item_key)
 
-            item_key = types.InlineKeyboardButton(text=get_translation('PhonePe'),
+            item_key = types.InlineKeyboardButton(text=get_translation('PhonePe', call.message.chat.id),
                                                   callback_data='order_proceed_phonepe')
             keyboard.add(item_key)
 
-            text = get_translation('Choose payment type')
+            text = get_translation('Choose payment type', call.message.chat.id)
 
             m_ = bot.send_message(call.message.chat.id, text=text, reply_markup=keyboard)
             track_and_clear_messages(call.message, False)
@@ -341,8 +374,11 @@ def callback_worker(call):
             cart_text = '\n'.join(
                 [
                     '{} [{}] x {} = {}'.format(
-                        c, cart[c][0], cart[c][3], cart[c][2] * cart[c][3]
-                    ) for c in cart
+                        c,
+                        current_cart['cart'][c][0],
+                        current_cart['cart'][c][3],
+                        current_cart['cart'][c][2] * current_cart['cart'][c][3]
+                    ) for c in current_cart['cart']
                 ]
             )
             delivery_map = {
@@ -350,11 +386,11 @@ def callback_worker(call):
                 AWAY: 'Takeaway',
                 REST: 'Restaurant'
             }
-            delivery = delivery_map.get(cart_type)
+            delivery = delivery_map.get(current_cart['order_type'])
             pay_type = 'Cash' if call.data == 'order_proceed_cash' else 'PhonePe'
-            comments = '' # '\nКомментарий
+            comments = ''  # '\nКомментарий
             bot.send_message(
-                NICK_ID,
+                managers[0],
                 text='Новый заказ от @{} ({}):\n{}, {}\n{}{}'.format(
                     call.message.chat.username, call.message.chat.id,
                     delivery, pay_type, cart_text, comments
@@ -365,33 +401,35 @@ def callback_worker(call):
                 text='Спасибо за ваш заказ! С вами свяжутся в ближайшее время'
             )
             track_and_clear_messages(m_)
-            cart = {}
-            curr_menu = None
+
+            reset_settings(call.message.chat.id, soft=True)
             return
         elif call.data == 'go_back':
             # todo flush product_info
-            if ':' not in curr_menu:
-                curr_menu = None
+            if ':' not in curr_menu[call.message.chat.id]:
+                curr_menu[call.message.chat.id] = None
             else:
-                curr_menu = ':'.join(curr_menu.split(':')[:-1])
+                curr_menu[call.message.chat.id] = ':'.join(
+                    curr_menu[call.message.chat.id].split(':')[:-1]
+                )
 
         elif call.data.startswith('order_'):
             ordered_item = get_concrete_data(call.data[6:])
             name = call.data.split(':')[-1]
             content = ordered_item
-            if name not in cart:
+            if name not in current_cart['cart']:
                 content.append(1)  # amount
                 content.append(call.data[6:])  # full path
-                cart[name] = content
+                current_cart['cart'][name] = content
             else:
-                cart[name][3] += 1
+                current_cart['cart'][name][3] += 1
             # show_type = 'product'
         elif call.data.startswith('remove_order_'):
             # removed_item = get_concrete_data(call.data[13:])
             name = call.data.split(':')[-1]
-            cart[name][3] -= 1
-            if cart[name][3] <= 0:
-                del cart[name]
+            current_cart['cart'][name][3] -= 1
+            if current_cart['cart'][name][3] <= 0:
+                del current_cart['cart'][name]
             show_type = 'cart'
         show_menu(call.message, show_type)
     except Exception as e:
