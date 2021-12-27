@@ -111,7 +111,7 @@ def show_menu(message, show='menu'):
         data_ = get_concrete_data(current)
         logger(type(data_))
         if isinstance(data_, dict):
-            add_menu_buttons(data_, '' if not current else f'{current}:')
+            add_menu_buttons(data_, '' if not current else (current + ':'))
         else:
             logger('WARNING!! for path {current} not possible make menu')
 
