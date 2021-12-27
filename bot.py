@@ -2,19 +2,9 @@ import telebot
 from telebot import types
 
 from data import *
-
+from settings import *
 
 DEBUG = True
-
-token = 'secret:token'
-
-NICK_ID = 608982434
-UZBEK_ID = 961154761
-
-manager_ids = [
-    NICK_ID,
-    UZBEK_ID,
-]
 
 lang = None
 curr_menu = None

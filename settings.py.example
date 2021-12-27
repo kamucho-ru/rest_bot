@@ -1,0 +1,5 @@
+token = 'secret:token'
+
+manager_ids = [
+    12345,
+]
