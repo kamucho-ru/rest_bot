@@ -91,7 +91,9 @@ def show_menu(message, show='menu'):
         def add_menu_buttons(submenu_data, prev_path):
             for i in submenu_data:
                 if isinstance(submenu_data[i], list):
-                    text_ = f'{i} [{submenu_data[i][0]}]  / {submenu_data[i][2]}'
+                    text_ = '{} [{}] / {}'.format(
+                        i, submenu_data[i][0], submenu_data[i][2]
+                    )
                     callback_ = f'open_item_{prev_path}{i}'  # for showing product info
                     callback_ = f'order_{prev_path}{i}'
                 else:
@@ -126,7 +128,7 @@ def show_menu(message, show='menu'):
                     text=get_translation('{} [{}] * {} = {} rs.').format(
                         c, cart[c][0], cart[c][3], cart[c][2]*cart[c][3]
                     ),
-                    callback_data=f'remove_order_{cart[c][4]}')
+                    callback_data='remove_order_{}'.format(cart[c][4]))
                 keyboard.add(item_key)
         item_key = types.InlineKeyboardButton(
             text=get_translation('Proceed to order'),
@@ -238,7 +240,9 @@ def get_text_messages(message):
             488657210, #  Liza
         ]
         if message.chat.id not in known_ids:
-            bot.send_message(NICK_ID, text=f'new customer {message.from_user.id} {message.from_user}')
+            bot.send_message(NICK_ID, text='new customer {} {}'.format(
+                message.from_user.id, message.from_user
+            ))
             print('send to', message.chat.id)
 
     if not check_lang(message.chat.id):
@@ -248,7 +252,9 @@ def get_text_messages(message):
 @bot.callback_query_handler(func=lambda call: True)
 def callback_worker(call):
     try:
-        logger(f'callback_worker from {call.message.chat.username}:{call.data} [{call.message.text}]')
+        logger('callback_worker from {} : {} [{}]'.format(
+            call.message.chat.username, call.data, call.message.text
+        ))
         global lang, curr_menu, cart, cart_type
         show_type = 'menu'
 
@@ -334,7 +340,9 @@ def callback_worker(call):
             # сообщение менеджерам о новом заказе
             cart_text = '\n'.join(
                 [
-                    f'{c} [{cart[c][0]}] x {cart[c][3]} = {cart[c][2] * cart[c][3]}' for c in cart
+                    '{} [{}] x {} = {}'.format(
+                        c, cart[c][0], cart[c][3], cart[c][2] * cart[c][3]
+                    ) for c in cart
                 ]
             )
             delivery_map = {
@@ -347,12 +355,14 @@ def callback_worker(call):
             comments = '' # '\nКомментарий
             bot.send_message(
                 NICK_ID,
-                text=f'Новый заказ от @{call.message.chat.username} ({call.message.chat.id}):\n'
-                     f'{delivery}, {pay_type}\n{cart_text}{comments}',
+                text='Новый заказ от @{} ({}):\n{}, {}\n{}{}'.format(
+                    call.message.chat.username, call.message.chat.id,
+                    delivery, pay_type, cart_text, comments
+                ),
             )
             m_ = bot.send_message(
                 call.message.chat.id,
-                text=f'Спасибо за ваш заказ! С вами свяжутся в ближайшее время'
+                text='Спасибо за ваш заказ! С вами свяжутся в ближайшее время'
             )
             track_and_clear_messages(m_)
             cart = {}
@@ -385,7 +395,7 @@ def callback_worker(call):
             show_type = 'cart'
         show_menu(call.message, show_type)
     except Exception as e:
-        logger(f'Callback exception! + {e.__dict__}')
+        logger(f'Callback exception! + {e}')
 
 
 bot.polling(none_stop=True, interval=0)
