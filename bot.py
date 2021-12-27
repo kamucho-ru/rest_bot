@@ -92,11 +92,11 @@ def show_menu(message, show='menu'):
                     text_ = '{} [{}] / {}'.format(
                         i, submenu_data[i][0], submenu_data[i][2]
                     )
-                    callback_ = f'open_item_{prev_path}{i}'  # for showing product info
-                    callback_ = f'order_{prev_path}{i}'
+                    callback_ = 'open_item_' + prev_path + i  # for showing product info
+                    callback_ = 'order_' + prev_path + i
                 else:
                     text_ = i
-                    callback_ = f'open_menu_{prev_path}{i}'
+                    callback_ = 'open_menu_' + prev_path + i
 
                 item_key = types.InlineKeyboardButton(text=text_, callback_data=callback_)
                 keyboard.add(item_key)
