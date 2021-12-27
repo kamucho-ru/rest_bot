@@ -75,6 +75,9 @@ def get_concrete_data(crnt, default=menu):
 
 def track_and_clear_messages(message, and_clear=True):
     global messages
+
+    if message.chat.id not in messages:
+        messages[message.chat.id] = []
     current_messages = messages[message.chat.id]
     not_inserted = True
     logger('track message "{}" ({}), already there: [{}]'.format(
