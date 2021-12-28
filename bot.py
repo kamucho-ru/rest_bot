@@ -65,7 +65,11 @@ def reset_settings(user_id, soft=False):
     if not soft:
         lang[user_id] = None
     curr_menu[user_id] = None
-    del cart[user_id]
+    cart[user_id] = {
+        'cart': {},
+        'order_type': REST,
+        'pay_type': None,
+    }
 
 
 def get_translation(s, user_id):
