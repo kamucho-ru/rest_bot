@@ -11,15 +11,12 @@ translations = {
         '{}, {} items * {} rs. = {} rs.': '{}, {} шт * {} руп. = {} руп.',
         '<< back <<': '<< Назад <<',
         'Please select ': 'Сделайте ваш выбор ',
-        'Select positions for delete or proceed to order':
-            'Выберите позиции для удаления или перейдите к оформлению заказа',
+        'Select positions for delete or proceed to order': 'Выберите позиции для удаления или перейдите к оформлению заказа',
         'Proceed to order': 'Перейти к оформлению заказа',
         'Under construction. Please back later...': 'В разработке. Попробуйте повторить позже...',
         'Go to top menu': 'Вернуться в главное меню',
     },
-    'hin': {
-
-    },
+    'hin': {},
 }
 
 drinks = {
@@ -38,61 +35,59 @@ drinks = {
 
 menu = {
     # 'Full menu': {
-        'Breakfast': {
-            'Omelette eggs': ['Eggs', 'picture_url', 100],
-            'Omelette eggs & milk': ['Eggs, milk', 'picture_url', 120],
-            'Teremok': ['eggs, tomatoes, olives, cheese, greens, mushrooms', 'picture_url', 160],
-            'spring roll': ['rice paper, veggies, chicken', 'picture_url', 60],
-            'vietnam spring roll': ['papaya, carrot, cucumber, chicken, eggs', 'picture_url', 60],
-            'Parotra from chief': ['egg, tomatoe, cheese, greens, onion', 'picture_url', 60],
-            'Parota egg roll tofu': ['Eggs, tofu, ', 'picture_url', 140],
-            'Parota egg roll chicken': ['Eggs, chicken, ', 'picture_url', 140],
-            'Pakoda Cheese': ['Smoked', 'picture_url', 150],
-        },
-        'Hot dishes': {
-            'Pulao pork': ['Rice, pork, veges & spices', 'picture_url', 230],
-            'Pulao tofu': ['Rice, tofu, veges & spices', 'picture_url', 230],
-            'Rice': ['Plain rice', 'picture_url', 60],
-            'Kazan Kabab': ['Rice and veggies', 'picture_url', 180],
-            'Mushed potatoes': ['Plain', 'picture_url', 80],
-            'Mushed potatoes & cutlets': ['with chicken cutlet', 'picture_url', 160],
-            'Pasta': ['Plain', 'picture_url', 80],
-            'Pasta chicken': ['Pasta with chicken', 'picture_url', 230],
-            'Pasta mushrooms': ['Pasta with mushrooms', 'picture_url', 210],
-            'Pasta prawns': ['Pasta with prawns', 'picture_url', 230],
-            'Chow Mein': ['Noodles with veggies', 'picture_url', 230],
-            'Chow Mein chicken': ['Noodles with veggies and chicken', 'picture_url', 230],
-            'Dumplings': ['Potatoe, mushrooms', 'picture_url', 210],
-            'Dumplings tofu': ['Potatoe, mushrooms, tofu', 'picture_url', 230],
-            'Dumplings chicken': ['Potatoe, mushrooms, chicken', 'picture_url', 230],
-        },
-        'Soups': {
-            'Veg hot\'n\'sour': ['Plain rice', 'picture_url', 60],
-            'tomatoe cream': ['Plain rice', 'picture_url', 60],
-            'mushroom cream': ['Plain rice', 'picture_url', 60],
-            'Borsh chicken': ['Plain rice', 'picture_url', 180],
-            'Okroshka': ['Plain rice', 'picture_url', 180],
-            'Chalop': ['Plain rice', 'picture_url', 180],
-            'Pea tofu': ['Plain rice', 'picture_url', 200],
-            'Pea chicken': ['Plain rice', 'picture_url', 200],
-            'Pea ribs': ['from chief', 'picture_url', 250],
-            'Chicken': ['Chicken, noodles and paneer', 'picture_url', 180],
-            'Pumpkin': ['Plain rice', 'picture_url', 180],
-        },
-        'Salads': {
-            'Olivie (chicken)': ['Chicken, green pea, potatoe, eggs, greens', 'picture_url', 140],
-            'Olivie (tofu)': ['Tofu, green pea, potatoe, eggs, greens', 'picture_url', 140],
-            'Spring': ['Marinated cabbage, carrot, onion', 'picture_url', 100],
-            'Achik chuchuk': ['Marinated onion with tomatoes', 'picture_url', 100],
-            'Beetroot & garlic': ['Beetroot, garlic, mayonese', 'picture_url', 100],
-            'Greece\'s': ['Beetroot, garlic, mayonese', 'picture_url', 160],
-            'Caesar': ['Parmezane', 'picture_url', 180],
-        },
-        # 'Crepes': {
-            '''
-             Crepes   
+    'Breakfast': {
+        'Omelette eggs': ['Eggs', 'picture_url', 100],
+        'Omelette eggs & milk': ['Eggs, milk', 'picture_url', 120],
+        'Teremok': ['eggs, tomatoes, olives, cheese, greens, mushrooms', 'picture_url', 160],
+        'spring roll': ['rice paper, veggies, chicken', 'picture_url', 60],
+        'vietnam spring roll': ['papaya, carrot, cucumber, chicken, eggs', 'picture_url', 60],
+        'Parotra from chief': ['egg, tomatoe, cheese, greens, onion', 'picture_url', 60],
+        'Parota egg roll tofu': ['Eggs, tofu, ', 'picture_url', 140],
+        'Parota egg roll chicken': ['Eggs, chicken, ', 'picture_url', 140],
+        'Pakoda Cheese': ['Smoked', 'picture_url', 150],
+    },
+    'Hot dishes': {
+        'Pulao pork': ['Rice, pork, veges & spices', 'picture_url', 230],
+        'Pulao tofu': ['Rice, tofu, veges & spices', 'picture_url', 230],
+        'Rice': ['Plain rice', 'picture_url', 60],
+        'Kazan Kabab': ['Rice and veggies', 'picture_url', 180],
+        'Mushed potatoes': ['Plain', 'picture_url', 80],
+        'Mushed potatoes & cutlets': ['with chicken cutlet', 'picture_url', 160],
+        'Pasta': ['Plain', 'picture_url', 80],
+        'Pasta chicken': ['Pasta with chicken', 'picture_url', 230],
+        'Pasta mushrooms': ['Pasta with mushrooms', 'picture_url', 210],
+        'Pasta prawns': ['Pasta with prawns', 'picture_url', 230],
+        'Chow Mein': ['Noodles with veggies', 'picture_url', 230],
+        'Chow Mein chicken': ['Noodles with veggies and chicken', 'picture_url', 230],
+        'Dumplings': ['Potatoe, mushrooms', 'picture_url', 210],
+        'Dumplings tofu': ['Potatoe, mushrooms, tofu', 'picture_url', 230],
+        'Dumplings chicken': ['Potatoe, mushrooms, chicken', 'picture_url', 230],
+    },
+    'Soups': {
+        'Veg hot\'n\'sour': ['Plain rice', 'picture_url', 60],
+        'tomatoe cream': ['Plain rice', 'picture_url', 60],
+        'mushroom cream': ['Plain rice', 'picture_url', 60],
+        'Borsh chicken': ['Plain rice', 'picture_url', 180],
+        'Okroshka': ['Plain rice', 'picture_url', 180],
+        'Chalop': ['Plain rice', 'picture_url', 180],
+        'Pea tofu': ['Plain rice', 'picture_url', 200],
+        'Pea chicken': ['Plain rice', 'picture_url', 200],
+        'Pea ribs': ['from chief', 'picture_url', 250],
+        'Chicken': ['Chicken, noodles and paneer', 'picture_url', 180],
+        'Pumpkin': ['Plain rice', 'picture_url', 180],
+    },
+    'Salads': {
+        'Olivie (chicken)': ['Chicken, green pea, potatoe, eggs, greens', 'picture_url', 140],
+        'Olivie (tofu)': ['Tofu, green pea, potatoe, eggs, greens', 'picture_url', 140],
+        'Spring': ['Marinated cabbage, carrot, onion', 'picture_url', 100],
+        'Achik chuchuk': ['Marinated onion with tomatoes', 'picture_url', 100],
+        'Beetroot & garlic': ['Beetroot, garlic, mayonese', 'picture_url', 100],
+        'Greece\'s': ['Beetroot, garlic, mayonese', 'picture_url', 160],
+        'Caesar': ['Parmezane', 'picture_url', 180],
+    },
+    # 'Crepes': {
+    '''
 Plain    80
-
 'Rice': ['Plain rice', 'picture_url', 60],
 Chicken, potatoe    + 140
 'Rice': ['Plain rice', 'picture_url', 60],
@@ -112,35 +107,33 @@ Cheese Paneer, cottage cheese, greens   140
 'Rice': ['Plain rice', 'picture_url', 60],
 Mushrooms cream sause, cheese   140
 'Rice': ['Plain rice', 'picture_url', 60],
-Chicken cream sause, cheese   
+Chicken cream sause, cheese
 'Rice': ['Plain rice', 'picture_url', 170],
-from chief креветки, сыр, соус тузлук, кокос   
+from chief креветки, сыр, соус тузлук, кокос
 'Rice': ['Plain rice', 'picture_url', 250],
             '''
-
-        # },
-        # 'Pies': {
-            '''
+    # },
+    # 'Pies': {
+    '''
              Pies   140
 'Rice': ['Plain rice', 'picture_url', 140],
 Cabbage mushroom, onion  +  140
 'Rice': ['Plain rice', 'picture_url', 140],
 Potatoe mushroom, onion  +  +
-'Rice': ['Plain rice', 'picture_url', 140], 
+'Rice': ['Plain rice', 'picture_url', 140],
 Tofu potatoe, onion  +
 'Rice': ['Plain rice', 'picture_url', 140],
 Chicken potatoe, onion   140
 'Rice': ['Plain rice', 'picture_url', 140],
  Open pies   140
 'Rice': ['Plain rice', 'picture_url', 140],
-Cottage cheese   +  
+Cottage cheese
 'Rice': ['Plain rice', 'picture_url', 140],
-Pineapple-papaya jam   +  
+Pineapple-papaya jam
 'Rice': ['Plain rice', 'picture_url', 140],
             '''
-
-        # },
-        'Drinks': drinks,
+    # },
+    'Drinks': drinks,
     # },
     # 'Veg menu': {
     #     'Hot dishes': {

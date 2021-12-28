@@ -2,16 +2,16 @@ import telebot
 from telebot import types
 
 from data import langs, menu, translations  # noqa
-from settings import DEBUG, managers, token  # noqa
+from settings import DEBUG, NICK_ID, managers, token  # noqa
 
 # searate carts for users
 cart = {
-  # 'user_id': {
-  #     'cart': {},
-  #     'order_type': {},
-  #     'pay_type': {},
-  #     'comments': {},
-  # }
+    # 'user_id': {
+    #     'cart': {},
+    #     'order_type': {},
+    #     'pay_type': {},
+    #     'comments': {},
+    # }
 }
 
 lang = {
@@ -66,10 +66,7 @@ def get_concrete_data(crnt, default=menu):
         return default
 
     if ':' in crnt:
-        return get_concrete_data(
-            ':'.join(crnt.split(':')[1:]),
-            default[crnt.split(':')[0]]
-        )
+        return get_concrete_data(':'.join(crnt.split(':')[1:]), default[crnt.split(':')[0]])
     return default[crnt]
 
 
@@ -80,9 +77,11 @@ def track_and_clear_messages(message, and_clear=True):
         messages[message.chat.id] = []
     current_messages = messages[message.chat.id]
     not_inserted = True
-    logger('track message "{}" ({}), already there: [{}]'.format(
-        message.text, message.id, [(m.text, m.id) for m in current_messages]
-    ))
+    logger(
+        'track message "{}" ({}), already there: [{}]'.format(
+            message.text, message.id, [(m.text, m.id) for m in current_messages]
+        )
+    )
     for m in current_messages:
         if m.id == message.id:
             not_inserted = False
@@ -91,9 +90,11 @@ def track_and_clear_messages(message, and_clear=True):
             try:
                 bot.delete_message(m.chat.id, m.id)
             except Exception as e:
-                logger('EXCEPTION WARNING while deleting message "{}" ({}): {}'.format(
-                    m.text, m.id, e
-                ))
+                logger(
+                    'EXCEPTION WARNING while deleting message "{}" ({}): {}'.format(
+                        m.text, m.id, e
+                    )
+                )
             current_messages.remove(m)
 
     if not_inserted:
@@ -126,16 +127,14 @@ def check_lang(user_id):
         question = '?'
         m_ = bot.send_message(user_id, text=question, reply_markup=keyboard)
         track_and_clear_messages(m_, False)
-    logger('Language check for {}: {}'.format(
-        user_id, True if m_ else False
-    ))
+    logger('Language check for {}: {}'.format(user_id, True if m_ else False))
     return m_
 
 
 def cut_description(descr, text_len):
     # receive minus amount of symbols, that are already presented in text
     max_descr_len = text_len + 279  # add maximum length constant
-    return descr if len(descr) <= max_descr_len else descr[:max_descr_len - 3] + ' ..'
+    return descr if len(descr) <= max_descr_len else descr[: max_descr_len - 3] + ' ..'
 
 
 def show_menu(message, show='menu'):
@@ -155,7 +154,7 @@ def show_menu(message, show='menu'):
 
                     description = cut_description(
                         submenu_data[i][0],
-                        6 - len(template_text) - len(name) - len(str(submenu_data[i][2]))
+                        6 - len(template_text) - len(name) - len(str(submenu_data[i][2])),
                     )
 
                     text_ = template_text.format(name, description, submenu_data[i][2])
@@ -172,7 +171,7 @@ def show_menu(message, show='menu'):
             keyboard.add(
                 types.InlineKeyboardButton(
                     text=get_translation('Go to top menu', message.chat.id),
-                    callback_data='open_menu'
+                    callback_data='open_menu',
                 )
             )
         data_ = get_concrete_data(current)
@@ -196,30 +195,25 @@ def show_menu(message, show='menu'):
             # max length of button string is 280, plus 2 symbols ({} for each variable) in template
             description = cut_description(
                 current_cart['cart'][c][0],
-                8 - len(template_text) - len(name) - len(amount) - len(total)
+                8 - len(template_text) - len(name) - len(amount) - len(total),
             )
 
             item_key = types.InlineKeyboardButton(
-                text=template_text.format(
-                    name,
-                    description,
-                    amount,
-                    total
-                ),
-                callback_data='remove_order_{}'.format(current_cart['cart'][c][4]))
+                text=template_text.format(name, description, amount, total),
+                callback_data='remove_order_{}'.format(current_cart['cart'][c][4]),
+            )
             keyboard.add(item_key)
         item_key = types.InlineKeyboardButton(
             text=get_translation('Proceed to order', message.chat.id),
-            callback_data='order_proceed_2')
+            callback_data='order_proceed_2',
+        )
         keyboard.add(item_key)
 
     elif show == 'product':
         # show info about product and order buttons
         data = get_concrete_data(curr_menu.get(message.chat.id))
         text = '***___{}___***</b>\n{}, {} rs.'.format(
-            curr_menu.get(message.chat.id).split(':')[-2],
-            data[0],
-            data[2]
+            curr_menu.get(message.chat.id).split(':')[-2], data[0], data[2]
         )
         messages_stack.append(text)
         # send picture with url data_[1]
@@ -232,7 +226,7 @@ def show_menu(message, show='menu'):
         keyboard = types.InlineKeyboardMarkup()
         item_key = types.InlineKeyboardButton(
             text=get_translation('Add 1', message.chat.id),
-            callback_data='order_' + curr_menu.get(message.chat.id)
+            callback_data='order_' + curr_menu.get(message.chat.id),
         )
         keyboard.add(item_key)
 
@@ -241,7 +235,7 @@ def show_menu(message, show='menu'):
                 if current_cart['cart'][i][3] > 0:
                     item_key = types.InlineKeyboardButton(
                         text=get_translation('Remove 1', message.chat.id),
-                        callback_data='remove_order_' + curr_menu.get(message.chat.id)
+                        callback_data='remove_order_' + curr_menu.get(message.chat.id),
                     )
                     keyboard.add(item_key)
 
@@ -256,16 +250,17 @@ def show_menu(message, show='menu'):
             cart_items += int(current_cart['cart'][c][3])
             cart_price += int(current_cart['cart'][c][3]) * int(current_cart['cart'][c][2])
         item_key = types.InlineKeyboardButton(
-            text=get_translation('Cart: {} items = {} rs.', message.chat.id).format(cart_items, cart_price),
-            callback_data='order_proceed'
+            text=get_translation('Cart: {} items = {} rs.', message.chat.id).format(
+                cart_items, cart_price
+            ),
+            callback_data='order_proceed',
         )
         keyboard.add(item_key)
 
     # Назад или сразу полное меню
     if curr_menu.get(message.chat.id):
         item_key = types.InlineKeyboardButton(
-            text=get_translation('<< back', message.chat.id),
-            callback_data='go_back'
+            text=get_translation('<< back', message.chat.id), callback_data='go_back'
         )
         keyboard.add(item_key)
 
@@ -273,7 +268,9 @@ def show_menu(message, show='menu'):
     if curr_menu.get(message.chat.id):
         question = curr_menu.get(message.chat.id).lower().replace(':', ' > ')
     if show == 'cart':
-        question = get_translation('Select positions for delete or proceed to order', message.chat.id)
+        question = get_translation(
+            'Select positions for delete or proceed to order', message.chat.id
+        )
 
     track_and_clear_messages(message)
 
@@ -309,9 +306,11 @@ def get_text_messages(message):
 @bot.callback_query_handler(func=lambda call: True)
 def callback_worker(call):
     try:
-        logger('callback_worker from {} : {} [{}]'.format(
-            call.message.chat.username, call.data, call.message.text
-        ))
+        logger(
+            'callback_worker from {} : {} [{}]'.format(
+                call.message.chat.username, call.data, call.message.text
+            )
+        )
         global lang, curr_menu, cart
         show_type = 'menu'
 
@@ -345,18 +344,20 @@ def callback_worker(call):
 
             item_key = types.InlineKeyboardButton(
                 text=get_translation('Order at restaurant', call.message.chat.id),
-                callback_data='order_proceed_restaurant'
+                callback_data='order_proceed_restaurant',
             )
             keyboard.add(item_key)
 
             item_key = types.InlineKeyboardButton(
                 text=get_translation('Takeaway from restaurant', call.message.chat.id),
-                callback_data='order_proceed_takeaway')
+                callback_data='order_proceed_takeaway',
+            )
             keyboard.add(item_key)
 
             item_key = types.InlineKeyboardButton(
                 text=get_translation('Delivery', call.message.chat.id),
-                callback_data='order_proceed_delivery')
+                callback_data='order_proceed_delivery',
+            )
             keyboard.add(item_key)
 
             text = get_translation('Choose order type', call.message.chat.id)
@@ -367,7 +368,7 @@ def callback_worker(call):
         elif call.data in [
             'order_proceed_delivery',
             'order_proceed_takeaway',
-            'order_proceed_restaurant'
+            'order_proceed_restaurant',
         ]:
             if call.data == 'order_proceed_delivery':
                 current_cart['order_type'] = DLVR
@@ -381,13 +382,13 @@ def callback_worker(call):
 
             item_key = types.InlineKeyboardButton(
                 text=get_translation('Cash', call.message.chat.id),
-                callback_data='order_proceed_cash'
+                callback_data='order_proceed_cash',
             )
             keyboard.add(item_key)
 
             item_key = types.InlineKeyboardButton(
                 text=get_translation('PhonePe', call.message.chat.id),
-                callback_data='order_proceed_phonepe'
+                callback_data='order_proceed_phonepe',
             )
             keyboard.add(item_key)
 
@@ -411,28 +412,29 @@ def callback_worker(call):
                         c,
                         current_cart['cart'][c][0],
                         current_cart['cart'][c][3],
-                        current_cart['cart'][c][2] * current_cart['cart'][c][3]
-                    ) for c in current_cart['cart']
+                        current_cart['cart'][c][2] * current_cart['cart'][c][3],
+                    )
+                    for c in current_cart['cart']
                 ]
             )
-            delivery_map = {
-                DLVR: 'Delivery',
-                AWAY: 'Takeaway',
-                REST: 'Restaurant'
-            }
+            delivery_map = {DLVR: 'Delivery', AWAY: 'Takeaway', REST: 'Restaurant'}
             delivery = delivery_map.get(current_cart['order_type'])
             pay_type = 'Cash' if call.data == 'order_proceed_cash' else 'PhonePe'
             comments = ''  # '\nКомментарий
             bot.send_message(
                 managers[0],
                 text='Новый заказ от @{} ({}):\n{}, {}\n{}{}'.format(
-                    call.message.chat.username, call.message.chat.id,
-                    delivery, pay_type, cart_text, comments
+                    call.message.chat.username,
+                    call.message.chat.id,
+                    delivery,
+                    pay_type,
+                    cart_text,
+                    comments,
                 ),
             )
             m_ = bot.send_message(
                 call.message.chat.id,
-                text='Спасибо за ваш заказ! С вами свяжутся в ближайшее время'
+                text='Спасибо за ваш заказ! С вами свяжутся в ближайшее время',
             )
             track_and_clear_messages(m_)
 

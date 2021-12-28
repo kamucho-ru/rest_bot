@@ -1,0 +1,17 @@
+[flake8]
+ignore =
+  E203,  // Handled by black (Whitespace before ':' -- handled by black)
+  E266,  // Handled by black (Too many leading '#' for block comment)
+  E402,  // Sometimes not possible due to execution order (Module level import is not at top of file)
+  E501,  // Handled by black (Line too long)
+  F405,  // Use models imported in translation_models
+  N804   // is a worse version of and conflicts with B902 (first argument of a classmethod should be named cls)
+  W503,  // Handled by black (Line break occured before a binary operator)
+  W605,  // regexp sequences
+max-line-length = 99
+select = N,B,C,E,F,W,T4,B9
+exclude =
+      static,
+      migrations,
+      .git,
+      __pycache__
