@@ -83,14 +83,9 @@ def track_and_clear_messages(message, and_clear=True):
 
     if message.chat.id not in messages:
         messages[message.chat.id] = []
-    current_messages = messages[message.chat.id]
     not_inserted = True
-    logger(
-        'track message "{}" ({}), already there: [{}]'.format(
-            message.text, message.id, [(m.text, m.id) for m in current_messages]
-        )
-    )
-    for m in current_messages:
+
+    for m in messages[message.chat.id]:
         if m.id == message.id:
             not_inserted = False
 
@@ -103,10 +98,17 @@ def track_and_clear_messages(message, and_clear=True):
                         m.text, m.id, e
                     )
                 )
-            current_messages.remove(m)
-
+            messages[message.chat.id].remove(m)
+    logger(
+        'track message "{}" ({}), already there (={}): [{}]'.format(
+            message.text,
+            message.id,
+            'no' if not_inserted else 'yes',
+            [(m.text, m.id) for m in messages[message.chat.id]],
+        )
+    )
     if not_inserted:
-        current_messages.append(message)
+        messages[message.chat.id].append(message)
 
 
 def get_current_cart(user_id):
@@ -126,6 +128,7 @@ def check_lang(user_id):
     global lang, langs
     m_ = False
     current_language = lang.get(user_id)
+    logger(f'current_language is {current_language}')
     if not current_language:
         keyboard = types.InlineKeyboardMarkup()
 
@@ -135,7 +138,9 @@ def check_lang(user_id):
         question = '?'
         m_ = bot.send_message(user_id, text=question, reply_markup=keyboard)
         track_and_clear_messages(m_, False)
-    logger('Language check for {}: {}'.format(user_id, True if m_ else False))
+    logger(
+        'Language check for {}: {} ({})'.format(user_id, True if m_ else False, lang.get(user_id))
+    )
     return m_
 
 
@@ -146,7 +151,7 @@ def cut_description(descr, text_len):
 
 
 def show_menu(message, show='menu'):
-    logger('showing menu')
+    logger('showing menu, type' + show)
     global lang, curr_menu, menu, cart
     messages_stack = []
     current_cart = get_current_cart(message.chat.id)
@@ -265,16 +270,16 @@ def show_menu(message, show='menu'):
         )
         keyboard.add(item_key)
 
+    question = get_translation('Please select ', message.chat.id)
+
     # Назад или сразу полное меню
     if curr_menu.get(message.chat.id):
         item_key = types.InlineKeyboardButton(
             text=get_translation('<< back', message.chat.id), callback_data='go_back'
         )
         keyboard.add(item_key)
-
-    question = get_translation('Please select ', message.chat.id)
-    if curr_menu.get(message.chat.id):
         question = curr_menu.get(message.chat.id).lower().replace(':', ' > ')
+
     if show == 'cart':
         question = get_translation(
             'Select positions for delete or proceed to order', message.chat.id
@@ -313,12 +318,6 @@ def get_text_messages(message):
 
     if message.text == '/clear':
         reset_settings(message.chat.id)
-
-    if DEBUG:
-        bot.send_message(
-            managers[0], text='new customer {} {}'.format(message.from_user.id, message.from_user)
-        )
-        print('send to', message.chat.id)
 
     if not check_lang(message.chat.id):
         show_menu(message)

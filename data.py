@@ -85,53 +85,36 @@ menu = {
         'Greece\'s': ['Beetroot, garlic, mayonese', 'picture_url', 160],
         'Caesar': ['Parmezane', 'picture_url', 180],
     },
-    # 'Crepes': {
-    '''
-Plain    80
-'Rice': ['Plain rice', 'picture_url', 60],
-Chicken, potatoe    + 140
-'Rice': ['Plain rice', 'picture_url', 60],
-Cheese, greens   +  140
-'Rice': ['Plain rice', 'picture_url', 60],
-Cottage cheese   +  140
-'Rice': ['Plain rice', 'picture_url', 60],
-Mix fruit   +  140
-'Rice': ['Plain rice', 'picture_url', 60],
-Cream cream, banana, pineapple   140
-'Rice': ['Plain rice', 'picture_url', 60],
-Chocolate chocolate, banana, nuts   140
-'Rice': ['Plain rice', 'picture_url', 60],
-Bounty Coconut, chocolate   140
-'Rice': ['Plain rice', 'picture_url', 60],
-Cheese Paneer, cottage cheese, greens   140
-'Rice': ['Plain rice', 'picture_url', 60],
-Mushrooms cream sause, cheese   140
-'Rice': ['Plain rice', 'picture_url', 60],
-Chicken cream sause, cheese
-'Rice': ['Plain rice', 'picture_url', 170],
-from chief креветки, сыр, соус тузлук, кокос
-'Rice': ['Plain rice', 'picture_url', 250],
-            '''
-    # },
+    'Crepes': {
+        'Plain': ['Plain rice', 'picture_url', 80],
+        'Chicken, potatoe': ['Plain rice', 'picture_url', 140],
+        'Cheese': ['Cheese, greens', 'picture_url', 140],
+        'Cottage cheese': ['Cottage cheese', 'picture_url', 140],
+        'Mix fruit': ['Fruits', 'picture_url', 140],
+        'Cream': ['cream, banana, pineapple', 'picture_url', 140],
+        'Chocolate': ['chocolate, banana, nuts', 'picture_url', 140],
+        'Bounty': ['Coconut, chocolate', 'picture_url', 140],
+        'Cheese Paneer': ['cottage cheese, greens', 'picture_url', 140],
+        'Mushrooms cream': ['sause, cheese', 'picture_url', 140],
+        'Chicken': ['cream sause, cheese', 'picture_url', 170],
+        'from chief': ['креветки, сыр, соус тузлук, кокос', 'picture_url', 250],
+    },
     # 'Pies': {
-    '''
-             Pies   140
-'Rice': ['Plain rice', 'picture_url', 140],
-Cabbage mushroom, onion  +  140
-'Rice': ['Plain rice', 'picture_url', 140],
-Potatoe mushroom, onion  +  +
-'Rice': ['Plain rice', 'picture_url', 140],
-Tofu potatoe, onion  +
-'Rice': ['Plain rice', 'picture_url', 140],
-Chicken potatoe, onion   140
-'Rice': ['Plain rice', 'picture_url', 140],
- Open pies   140
-'Rice': ['Plain rice', 'picture_url', 140],
-Cottage cheese
-'Rice': ['Plain rice', 'picture_url', 140],
-Pineapple-papaya jam
-'Rice': ['Plain rice', 'picture_url', 140],
-            '''
+    # 'Rice': ['Plain rice', 'picture_url', 140],
+    # Cabbage mushroom, onion  +  140
+    # 'Rice': ['Plain rice', 'picture_url', 140],
+    # Potatoe mushroom, onion  +  +
+    # 'Rice': ['Plain rice', 'picture_url', 140],
+    # Tofu potatoe, onion  +
+    # 'Rice': ['Plain rice', 'picture_url', 140],
+    # Chicken potatoe, onion   140
+    # 'Rice': ['Plain rice', 'picture_url', 140],
+    #  Open pies   140
+    # 'Rice': ['Plain rice', 'picture_url', 140],
+    # Cottage cheese
+    # 'Rice': ['Plain rice', 'picture_url', 140],
+    # Pineapple-papaya jam
+    # 'Rice': ['Plain rice', 'picture_url', 140],
     # },
     'Drinks': drinks,
     # },
