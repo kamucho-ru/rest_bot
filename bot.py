@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 
 from data import langs, menu, translations  # noqa
-from settings import DEBUG, NICK_ID, managers, token  # noqa
+from settings import DEBUG, managers, token  # noqa
 
 # searate carts for users
 cart = {
@@ -34,6 +34,14 @@ messages = {
     # 'user_id': []
 }
 
+known_users = []
+f = open('known_users.txt', 'r')
+x = f.readline()  # headers
+while x:
+    x = f.readline()
+    if '::' in x:
+        known_users.append(x.split('::')[0])
+f.close()
 
 bot = telebot.TeleBot(token)
 
@@ -289,6 +297,19 @@ def get_text_messages(message):
     global DEBUG
 
     track_and_clear_messages(message)
+
+    if message.chat.id not in known_users:
+        f = open('known_users.txt', 'a')
+        f.write('{}::{}::{}::Auto added\n'.format(
+            message.chat.id,
+            message.chat.username,
+            lang.get(message.chat.id, None)
+        ))
+        if not message.chat.username:
+            bot.forward_message(managers[0], message.chat.id, message.id)
+            bot.send_message(managers[0], text=f'Forwarded from {message.chat.id} {message.chat}')
+        known_users.append(message.chat.id)
+        f.close()
 
     if message.text == '/clear':
         reset_settings(message.chat.id)
