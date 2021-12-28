@@ -135,7 +135,7 @@ def check_lang(user_id):
 def cut_description(descr, text_len):
     # receive minus amount of symbols, that are already presented in text
     max_descr_len = text_len + 279  # add maximum length constant
-    return descr if len(descr) <= max_descr_len else descr[:max_descr_len]
+    return descr if len(descr) <= max_descr_len else descr[:max_descr_len - 3] + ' ..'
 
 
 def show_menu(message, show='menu'):
