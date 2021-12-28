@@ -146,7 +146,7 @@ def check_lang(user_id):
 
 def cut_description(descr, text_len):
     # receive minus amount of symbols, that are already presented in text
-    max_descr_len = text_len + 279  # add maximum length constant
+    max_descr_len = text_len + 276  # add maximum length constant
     return descr if len(descr) <= max_descr_len else descr[: max_descr_len - 3] + ' ..'
 
 
@@ -303,7 +303,7 @@ def get_text_messages(message):
 
     track_and_clear_messages(message)
 
-    if message.chat.id not in known_users:
+    if str(message.chat.id) not in known_users:
         f = open('known_users.txt', 'a')
         f.write(
             '{}::{}::{}::Auto added\n'.format(
