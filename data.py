@@ -37,7 +37,7 @@ drinks = {
 }
 
 menu = {
-    'Full menu': {
+    # 'Full menu': {
         'Breakfast': {
             'Omelette eggs': ['Eggs', 'picture_url', 100],
             'Omelette eggs & milk': ['Eggs, milk', 'picture_url', 120],
@@ -88,21 +88,72 @@ menu = {
             'Greece\'s': ['Beetroot, garlic, mayonese', 'picture_url', 160],
             'Caesar': ['Parmezane', 'picture_url', 180],
         },
+        # 'Crepes': {
+            '''
+             Crepes   
+Plain    80
 
+'Rice': ['Plain rice', 'picture_url', 60],
+Chicken, potatoe    + 140
+'Rice': ['Plain rice', 'picture_url', 60],
+Cheese, greens   +  140
+'Rice': ['Plain rice', 'picture_url', 60],
+Cottage cheese   +  140
+'Rice': ['Plain rice', 'picture_url', 60],
+Mix fruit   +  140
+'Rice': ['Plain rice', 'picture_url', 60],
+Cream cream, banana, pineapple   140
+'Rice': ['Plain rice', 'picture_url', 60],
+Chocolate chocolate, banana, nuts   140
+'Rice': ['Plain rice', 'picture_url', 60],
+Bounty Coconut, chocolate   140
+'Rice': ['Plain rice', 'picture_url', 60],
+Cheese Paneer, cottage cheese, greens   140
+'Rice': ['Plain rice', 'picture_url', 60],
+Mushrooms cream sause, cheese   140
+'Rice': ['Plain rice', 'picture_url', 60],
+Chicken cream sause, cheese   
+'Rice': ['Plain rice', 'picture_url', 170],
+from chief креветки, сыр, соус тузлук, кокос   
+'Rice': ['Plain rice', 'picture_url', 250],
+            '''
+
+        # },
+        # 'Pies': {
+            '''
+             Pies   140
+'Rice': ['Plain rice', 'picture_url', 140],
+Cabbage mushroom, onion  +  140
+'Rice': ['Plain rice', 'picture_url', 140],
+Potatoe mushroom, onion  +  +
+'Rice': ['Plain rice', 'picture_url', 140], 
+Tofu potatoe, onion  +
+'Rice': ['Plain rice', 'picture_url', 140],
+Chicken potatoe, onion   140
+'Rice': ['Plain rice', 'picture_url', 140],
+ Open pies   140
+'Rice': ['Plain rice', 'picture_url', 140],
+Cottage cheese   +  
+'Rice': ['Plain rice', 'picture_url', 140],
+Pineapple-papaya jam   +  
+'Rice': ['Plain rice', 'picture_url', 140],
+            '''
+
+        # },
         'Drinks': drinks,
-    },
-    'Veg menu': {
-        'Hot dishes': {
-            'Soup': ['Pea sou, veggies', 'picture_url', 50],
-            'French fries': ['Fried potatoes', 'picture_url', 50],
-        },
-        'Salads': {
-            'Olivie (tofu)': ['Olivie with tofu', 'picture_url', 140],
-            'Achik chuchuk': ['Marinated onion with tomatoes', 'picture_url', 100],
-            'Spring': ['Cabbage, carrot, onion', 'picture_url', 100],
-            'Beetroot&garlic': ['Beetroot, garlic, mayonese', 'picture_url', 100],
-        },
-        'Drinks': drinks,
-    },
-    'Drinks': drinks
+    # },
+    # 'Veg menu': {
+    #     'Hot dishes': {
+    #         'Soup': ['Pea sou, veggies', 'picture_url', 50],
+    #         'French fries': ['Fried potatoes', 'picture_url', 50],
+    #     },
+    #     'Salads': {
+    #         'Olivie (tofu)': ['Olivie with tofu', 'picture_url', 140],
+    #         'Achik chuchuk': ['Marinated onion with tomatoes', 'picture_url', 100],
+    #         'Spring': ['Cabbage, carrot, onion', 'picture_url', 100],
+    #         'Beetroot&garlic': ['Beetroot, garlic, mayonese', 'picture_url', 100],
+    #     },
+    #     'Drinks': drinks,
+    # },
+    # 'Drinks': drinks
 }

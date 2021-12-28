@@ -113,6 +113,31 @@ def get_current_cart(user_id):
     return cart[user_id]
 
 
+def check_lang(user_id):
+    global lang, langs
+    m_ = False
+    current_language = lang.get(user_id)
+    if not current_language:
+        keyboard = types.InlineKeyboardMarkup()
+
+        for lang_name, call in langs:
+            lang_key = types.InlineKeyboardButton(text=lang_name, callback_data=call)
+            keyboard.add(lang_key)
+        question = '?'
+        m_ = bot.send_message(user_id, text=question, reply_markup=keyboard)
+        track_and_clear_messages(m_, False)
+    logger('Language check for {}: {}'.format(
+        user_id, True if m_ else False
+    ))
+    return m_
+
+
+def cut_description(descr, text_len):
+    # receive minus amount of symbols, that are already presented in text
+    max_descr_len = text_len + 279  # add maximum length constant
+    return descr if len(descr) <= max_descr_len else descr[:max_descr_len]
+
+
 def show_menu(message, show='menu'):
     logger('showing menu')
     global lang, curr_menu, menu, cart
@@ -125,9 +150,15 @@ def show_menu(message, show='menu'):
         def add_menu_buttons(submenu_data, prev_path):
             for i in submenu_data:
                 if isinstance(submenu_data[i], list):
-                    text_ = '{} [{}] / {}'.format(
-                        i, submenu_data[i][0], submenu_data[i][2]
+                    template_text = '{} [{}] / {}'
+                    name = i
+
+                    description = cut_description(
+                        submenu_data[i][0],
+                        6 - len(template_text) - len(name) - len(str(submenu_data[i][2]))
                     )
+
+                    text_ = template_text.format(name, description, submenu_data[i][2])
                     callback_ = 'open_item_' + prev_path + i  # for showing product info
                     callback_ = 'order_' + prev_path + i
                 else:
@@ -157,12 +188,23 @@ def show_menu(message, show='menu'):
         # show cart content
         keyboard = types.InlineKeyboardMarkup()
         for c in current_cart['cart']:
+            template_text = get_translation('{} [{}] * {} = {} rs.', message.chat.id)
+            name = c
+            amount = str(current_cart['cart'][c][3])
+            total = str(current_cart['cart'][c][2] * current_cart['cart'][c][3])
+
+            # max length of button string is 280, plus 2 symbols ({} for each variable) in template
+            description = cut_description(
+                current_cart['cart'][c][0],
+                8 - len(template_text) - len(name) - len(amount) - len(total)
+            )
+
             item_key = types.InlineKeyboardButton(
-                text=get_translation('{} [{}] * {} = {} rs.', message.chat.id).format(
-                    c,
-                    current_cart['cart'][c][0],
-                    current_cart['cart'][c][3],
-                    current_cart['cart'][c][2] * current_cart['cart'][c][3]
+                text=template_text.format(
+                    name,
+                    description,
+                    amount,
+                    total
                 ),
                 callback_data='remove_order_{}'.format(current_cart['cart'][c][4]))
             keyboard.add(item_key)
@@ -244,25 +286,6 @@ def show_menu(message, show='menu'):
     track_and_clear_messages(m_)
 
 
-def check_lang(user_id):
-    global lang, langs
-    m_ = False
-    current_language = lang.get(user_id)
-    if not current_language:
-        keyboard = types.InlineKeyboardMarkup()
-
-        for lang_name, call in langs:
-            lang_key = types.InlineKeyboardButton(text=lang_name, callback_data=call)
-            keyboard.add(lang_key)
-        question = '?'
-        m_ = bot.send_message(user_id, text=question, reply_markup=keyboard)
-        track_and_clear_messages(m_, False)
-    logger('Language check for {}: {}'.format(
-        user_id, True if m_ else False
-    ))
-    return m_
-
-
 @bot.message_handler(content_types=['text'])  # ['text', 'document', 'audio']
 def get_text_messages(message):
     logger('message received')
@@ -320,16 +343,20 @@ def callback_worker(call):
         elif call.data == 'order_proceed_2':
             keyboard = types.InlineKeyboardMarkup()
 
-            item_key = types.InlineKeyboardButton(text=get_translation('Order at restaurant', call.message.chat.id),
-                                                  callback_data='order_proceed_restaurant')
+            item_key = types.InlineKeyboardButton(
+                text=get_translation('Order at restaurant', call.message.chat.id),
+                callback_data='order_proceed_restaurant'
+            )
             keyboard.add(item_key)
 
-            item_key = types.InlineKeyboardButton(text=get_translation('Takeaway from restaurant', call.message.chat.id),
-                                                  callback_data='order_proceed_takeaway')
+            item_key = types.InlineKeyboardButton(
+                text=get_translation('Takeaway from restaurant', call.message.chat.id),
+                callback_data='order_proceed_takeaway')
             keyboard.add(item_key)
 
-            item_key = types.InlineKeyboardButton(text=get_translation('Delivery', call.message.chat.id),
-                                                  callback_data='order_proceed_delivery')
+            item_key = types.InlineKeyboardButton(
+                text=get_translation('Delivery', call.message.chat.id),
+                callback_data='order_proceed_delivery')
             keyboard.add(item_key)
 
             text = get_translation('Choose order type', call.message.chat.id)
@@ -352,12 +379,16 @@ def callback_worker(call):
             # способ оплаты - кэш/phonepe
             keyboard = types.InlineKeyboardMarkup()
 
-            item_key = types.InlineKeyboardButton(text=get_translation('Cash', call.message.chat.id),
-                                                  callback_data='order_proceed_cash')
+            item_key = types.InlineKeyboardButton(
+                text=get_translation('Cash', call.message.chat.id),
+                callback_data='order_proceed_cash'
+            )
             keyboard.add(item_key)
 
-            item_key = types.InlineKeyboardButton(text=get_translation('PhonePe', call.message.chat.id),
-                                                  callback_data='order_proceed_phonepe')
+            item_key = types.InlineKeyboardButton(
+                text=get_translation('PhonePe', call.message.chat.id),
+                callback_data='order_proceed_phonepe'
+            )
             keyboard.add(item_key)
 
             text = get_translation('Choose payment type', call.message.chat.id)
