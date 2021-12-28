@@ -300,11 +300,11 @@ def get_text_messages(message):
 
     if message.chat.id not in known_users:
         f = open('known_users.txt', 'a')
-        f.write('{}::{}::{}::Auto added\n'.format(
-            message.chat.id,
-            message.chat.username,
-            lang.get(message.chat.id, None)
-        ))
+        f.write(
+            '{}::{}::{}::Auto added\n'.format(
+                message.chat.id, message.chat.username, lang.get(message.chat.id, None)
+            )
+        )
         if not message.chat.username:
             bot.forward_message(managers[0], message.chat.id, message.id)
             bot.send_message(managers[0], text=f'Forwarded from {message.chat.id} {message.chat}')
@@ -315,9 +315,9 @@ def get_text_messages(message):
         reset_settings(message.chat.id)
 
     if DEBUG:
-        bot.send_message(managers[0], text='new customer {} {}'.format(
-            message.from_user.id, message.from_user
-        ))
+        bot.send_message(
+            managers[0], text='new customer {} {}'.format(message.from_user.id, message.from_user)
+        )
         print('send to', message.chat.id)
 
     if not check_lang(message.chat.id):
