@@ -34,13 +34,20 @@ messages = {
     # 'user_id': []
 }
 
-known_users = []
+known_users = {}
 f = open('known_users.txt', 'r')
 x = f.readline()  # headers
 while x:
     x = f.readline()
     if '::' in x:
-        known_users.append(x.split('::')[0])
+        x = x.replace('\n', '')
+        user_id = int(x.split('::')[0])
+        known_users[user_id] = {
+            'username': x.split('::')[1],
+            'comment': x.split('::')[3],
+        }
+        lang[user_id] = x.split('::')[2] if x.split('::')[2] != 'None' else None
+
 f.close()
 
 bot = telebot.TeleBot(token)
@@ -142,6 +149,21 @@ def check_lang(user_id):
         'Language check for {}: {} ({})'.format(user_id, True if m_ else False, lang.get(user_id))
     )
     return m_
+
+
+def update_langs():
+    global lang, known_users
+    f = open('known_users.txt', 'w')
+    f.write('#user_id::username::lang::comment\n')
+    f.writelines(
+        [
+            '{}::{}::{}::{}\n'.format(
+                x, known_users[x]['username'], lang[x], known_users[x]['comment']
+            )
+            for x in known_users
+        ]
+    )
+    f.close()
 
 
 def cut_description(descr, text_len):
@@ -303,17 +325,21 @@ def get_text_messages(message):
 
     track_and_clear_messages(message)
 
-    if str(message.chat.id) not in known_users:
+    if message.chat.id not in known_users:
         f = open('known_users.txt', 'a')
+        comment = 'Auto added'
         f.write(
-            '{}::{}::{}::Auto added\n'.format(
-                message.chat.id, message.chat.username, lang.get(message.chat.id, None)
+            '{}::{}::{}::{}\n'.format(
+                message.chat.id, message.chat.username, lang.get(message.chat.id, None), comment
             )
         )
         if not message.chat.username:
             bot.forward_message(managers[0], message.chat.id, message.id)
             bot.send_message(managers[0], text=f'Forwarded from {message.chat.id} {message.chat}')
-        known_users.append(message.chat.id)
+        known_users[message.chat.id] = {
+            'username': message.chat.username,
+            'comment': comment,
+        }
         f.close()
 
     if message.text == '/clear':
@@ -341,6 +367,7 @@ def callback_worker(call):
         if call.data.startswith('set_') and call.data.endswith('_lang'):
             # set language
             lang[call.message.chat.id] = call.data[4:-5]
+            update_langs()
 
         elif call.data == 'open_menu':
             # Show top
