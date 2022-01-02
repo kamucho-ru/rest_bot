@@ -172,7 +172,7 @@ def update_langs():
 
 def cut_description(descr, text_len):
     # receive minus amount of symbols, that are already presented in text
-    max_descr_len = text_len + 62  # add maximum length constant
+    max_descr_len = text_len + 55  # add maximum length constant
     return descr if len(descr) <= max_descr_len else descr[: max_descr_len - 3] + ' ..'
 
 
@@ -189,18 +189,21 @@ def show_menu(message, show='menu'):
             for i in submenu_data:
                 if isinstance(submenu_data[i], list):
                     template_text = '{} [{}] / {}'
-                    name = i
+                    name = get_translation(i, message.chat.id)
 
-                    description = cut_description(
-                        submenu_data[i][0],
-                        6 - len(template_text) - len(name) - len(str(submenu_data[i][2])),
+                    description = get_translation(
+                        cut_description(
+                            submenu_data[i][0],
+                            6 - len(template_text) - len(name) - len(str(submenu_data[i][2])),
+                        ),
+                        message.chat.id,
                     )
 
                     text_ = template_text.format(name, description, submenu_data[i][2])
                     callback_ = 'open_item_' + prev_path + i  # for showing product info
                     callback_ = 'order_' + prev_path + i
                 else:
-                    text_ = i
+                    text_ = get_translation(i, message.chat.id)
                     callback_ = 'open_menu_' + prev_path + i
 
                 item_key = types.InlineKeyboardButton(text=text_, callback_data=callback_)
@@ -227,14 +230,17 @@ def show_menu(message, show='menu'):
         keyboard = types.InlineKeyboardMarkup()
         for c in current_cart['cart']:
             template_text = get_translation('{} [{}] * {} = {} rs.', message.chat.id)
-            name = c
+            name = get_translation(c, message.chat.id)
             amount = str(current_cart['cart'][c][3])
             total = str(current_cart['cart'][c][2] * current_cart['cart'][c][3])
 
             # max length of button string is 280, plus 2 symbols ({} for each variable) in template
-            description = cut_description(
-                current_cart['cart'][c][0],
-                8 - len(template_text) - len(name) - len(amount) - len(total),
+            description = get_translation(
+                cut_description(
+                    current_cart['cart'][c][0],
+                    8 - len(template_text) - len(name) - len(amount) - len(total),
+                ),
+                message.chat.id,
             )
 
             item_key = types.InlineKeyboardButton(
@@ -304,7 +310,12 @@ def show_menu(message, show='menu'):
             text=get_translation('<< back', message.chat.id), callback_data='go_back'
         )
         keyboard.add(item_key)
-        question = curr_menu.get(message.chat.id).lower().replace(':', ' > ')
+        question = ' > '.join(
+            [
+                get_translation(s, message.chat.id)
+                for s in curr_menu.get(message.chat.id).split(':')
+            ]
+        )
 
     if show == 'cart':
         question = get_translation(
@@ -485,7 +496,10 @@ def callback_worker(call):
             )
             m_ = bot.send_message(
                 call.message.chat.id,
-                text='Спасибо за ваш заказ! С вами свяжутся в ближайшее время',
+                text=get_translation(
+                    'Thank you for your order! Our managers will reach you soon',
+                    call.message.chat.id,
+                ),
             )
             track_and_clear_messages(m_)
 
@@ -493,7 +507,7 @@ def callback_worker(call):
             return
         elif call.data == 'go_back':
             # todo flush product_info
-            if ':' not in curr_menu[call.message.chat.id]:
+            if call.message.chat.id not in curr_menu or ':' not in curr_menu[call.message.chat.id]:
                 curr_menu[call.message.chat.id] = None
             else:
                 curr_menu[call.message.chat.id] = ':'.join(
