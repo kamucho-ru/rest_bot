@@ -170,12 +170,6 @@ def update_langs():
     f.close()
 
 
-def cut_description(descr, text_len):
-    # receive minus amount of symbols, that are already presented in text
-    max_descr_len = text_len + 55  # add maximum length constant
-    return descr if len(descr) <= max_descr_len else descr[: max_descr_len - 3] + ' ..'
-
-
 def show_menu(message, show='menu'):
     logger('showing menu, type' + show)
     global lang, curr_menu, menu, cart
@@ -188,18 +182,9 @@ def show_menu(message, show='menu'):
         def add_menu_buttons(submenu_data, prev_path):
             for i in submenu_data:
                 if isinstance(submenu_data[i], list):
-                    template_text = '{} [{}] / {}'
+                    template_text = '{} / {}'
                     name = get_translation(i, message.chat.id)
-
-                    description = get_translation(
-                        cut_description(
-                            submenu_data[i][0],
-                            6 - len(template_text) - len(name) - len(str(submenu_data[i][2])),
-                        ),
-                        message.chat.id,
-                    )
-
-                    text_ = template_text.format(name, description, submenu_data[i][2])
+                    text_ = template_text.format(name, submenu_data[i][2])
                     callback_ = 'open_item_' + prev_path + i  # for showing product info
                     callback_ = 'order_' + prev_path + i
                 else:
@@ -229,22 +214,12 @@ def show_menu(message, show='menu'):
         # show cart content
         keyboard = types.InlineKeyboardMarkup()
         for c in current_cart['cart']:
-            template_text = get_translation('{} [{}] * {} = {} rs.', message.chat.id)
+            template_text = get_translation('{} * {} = {} rs.', message.chat.id)
             name = get_translation(c, message.chat.id)
             amount = str(current_cart['cart'][c][3])
             total = str(current_cart['cart'][c][2] * current_cart['cart'][c][3])
-
-            # max length of button string is 280, plus 2 symbols ({} for each variable) in template
-            description = get_translation(
-                cut_description(
-                    current_cart['cart'][c][0],
-                    8 - len(template_text) - len(name) - len(amount) - len(total),
-                ),
-                message.chat.id,
-            )
-
             item_key = types.InlineKeyboardButton(
-                text=template_text.format(name, description, amount, total),
+                text=template_text.format(name, amount, total),
                 callback_data='remove_order_{}'.format(current_cart['cart'][c][4]),
             )
             keyboard.add(item_key)
@@ -336,7 +311,7 @@ def show_menu(message, show='menu'):
 @bot.message_handler(content_types=['text'])  # ['text', 'document', 'audio']
 def get_text_messages(message):
     logger('message received')
-    global DEBUG
+    global DEBUG, curr_menu
 
     track_and_clear_messages(message)
 
@@ -357,7 +332,9 @@ def get_text_messages(message):
         }
         f.close()
 
-    if message.text == '/clear':
+    if message.text == '/menu':
+        curr_menu[message.chat.id] = None
+    elif message.text == '/clear':
         reset_settings(message.chat.id)
 
     if not check_lang(message.chat.id):

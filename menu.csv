@@ -1,0 +1,120 @@
+Hot dishes;;;Горячие блюда
+Pulao pork; -;230;Плов со свининой
+Pulao tofu;+;230;Плов с тофу
+Pulao chicken; -;230;Плов с курицей
+Kazan Kabab; -;190;Казан кебаб
+Mushed potatoes;+;80;Картофельное пюре
+Mushed potatoes with 2 chicken cutlets; -;160;Пюре с 2 куриными котлетами
+Pasta plain;+;90;Паста
+Pasta chicken; -;190;Паста с курицей
+Pasta mushrooms;+;230;Паста с грибами
+Pasta prawns; -;250;Паста с креветками
+Dumplings (potatoe & mushrooms);+;210;Пельмени (картошка с грибами)
+Dumplings (potatoe & mushrooms & tofu);+;230;Пельмени (тофу и картошка с грибами)
+Dumplings (potatoe & mushrooms & chicken); -;230;Пельмени (курица и картошка с грибами)
+Belyash (veg);+;70;Беляш овощной
+Belyash (potatoe & mushrooms);+;70;Беляш с картошкой и грибами
+Belyash (chicken); -;110;Беляш с курицей
+Hychin (potatoe & cheese agydhe);+;150;Хычины с адыгейским сыром и картофельным пюре
+South-asian cuisine;;;Южно-азиатская кухня
+Rice plain;+;60;Варёный рис
+fried rice;+;70;обжареный рис
+fried rice w eggs;+;120;обжареный рис с яйцами
+fried rice w chicken; -;160;обжареный рис с курицей
+fried rice w vegetables;+;170;обжареный рис с овощами
+Dal rice;+;160;Дал с рисом
+Chilli paneer;+;140;Панир в соусе чили
+Chilli chicken; -;150;Курица в соусе чили
+Chow mein veg;+;230;Chow mein с овощами
+Chow mein chicken; -;230;Chow mein с курицей
+Smoked products;;;Копчёности
+Tofu;+;250;Копчёный тофу
+Tofu spicy;+;250;Копчёный острый тофу
+Cheese;+;250;Копчёный сыр
+Mackerel; -;250;Копчёная скумбрия
+Chicken, half; -;300;Копчёная курица, половина
+Lard per 100g; -;130;Копчёное сало, за 100 гр.
+Bacon per 100g; -;160;Копчёный бекон, за 100 гр.
+Ribs per 100g; -;150;Копчёный ребрышки, за 100 гр.
+Soups;;;Супы
+Tomatoe cream soup;+;180;Томатный крем-суп
+mushroom cream soup;+;180;Грибной крем-суп
+Borsh w tofu; +;180;Борщ с тофу
+Borsh w chicken; -;180;Борщ с курицей
+Okroshka w tofu;+;180;Окрошка с тофу
+Okroshka w chicken; -;180;Окрошка с курицей
+Chalop w tofu;+;180;Чалоп с тофу
+Chalop w chicken;;180;Чалоп с курицей
+Pea soup w tofu;+;200;Гороховый суп с тофу
+Pea soup w chicken;;200;Гороховый суп с курицей
+Soup on pork ribs from chief;;250;Суп на свинных рёбрышках, от шефа
+Chicken soup;;180;Куриный суп
+Pumpkin soup;+;180;Тыквенный суп
+Salads;;;Салаты
+Olivie plain;+;120;Оливье
+Olivie Tofu;+;140;Оливье с тофу
+Olivie chicken;;140;Оливье с курицей
+Spring (cabbage & carrot);+;100;Весенний (квашеная капуста с морковью)
+Achik chuchuk (marinated onions & tomatoes);+;100;Ачик-чучук (маринованный лук с томатами)
+Beetroot & garlic;+;100;Свекла и чеснокэ
+'Greece''s';+;180;Греческий
+Caesar w tofu;;180;Цезарь с тофу
+Caesar w chicken;+;180;Цезарь с курицей
+Veggies w butter;+;120;Овощной c маслом
+Veggies w milk cream;+;120;Овощной со сметаной
+sauerkraut;+;100;Квашеная капуста
+Vainigrette;+;140;Винегрет
+Pies;;;Пироги
+Cabbage;+;140;Пирог с капустой
+Potatoe;+;140;Пирог с картошкой
+Tofu;+;140;Пирон с тофу
+Chicken;;140;Пирог с курицей
+Fish;;140;Пирог с рыбой
+Rice & eggs & onion;+;140;Пирог с рисом, яйцами и грибами
+Royal cheesecake from chief;+;140;Королевская ватрушка
+Pineapple-papaya jam;+;140;Ананас-папайя джем
+Crepes;;;Блинчики
+Plain;;80;Блинчики
+Mushrooms;+;140;Блинчики с грибами
+Teremok;+;160;Блинчики Теремок
+Chicken;;170;Блинчики с курицей
+Cheese, greens;+;140;Блинчики с курицей
+Tofu, greens;+;140;Блинчики с курицей
+Cottage cheese;+;140;Блинчики с курицей
+Mix fruit;+;140;Блинчики с курицей
+Cream;+;140;Блинчики с курицей
+Chocolate;+;140;Блинчики с курицей
+Bounty;+;140;Блинчики с курицей
+from chief;;250;Блинчики с курицей
+KFC;;;KFC
+Chicken wings;;200;Куриные крылышки
+Chicken legs;;160;Куриные ножки
+French Fries;+;120;Картошка фри
+Fried calamar rings;;160;Кольца кальмаров во фритюре
+Fried prawns;;160;Креветки
+Fried Chicken;;160;Курица
+Pakoda Cheese;+;150;Панир в кляре
+Breakfast;;;Завтраки
+Omelette;+;100;Яишница
+Omelette w milk;+;120;Омлет
+Tosts w tofu; +;70;Тосты с тофу
+Tosts w lard;;70;Тосты с салом
+vietnam spring roll;;160;Вьетнамский спринг-ролл
+Parota egg roll tofu;+;140;Парота ролл с яйцами и тофу
+Parota egg roll cheese;+;140;Парота ролл с яйцами и сыром
+Parota egg roll chicken;;140;Парота ролл с яйцами и курицей
+Pakoda Cheese;+;150;Панир в кляре
+Pumpkin porrige;+;140;Тыквенная каша
+Drinks;;;Напитки
+Black tea;+;50;Чёрный чай
+Milk tea;+;50;Чай с молоком
+Masala tea;+;50;Масала чай
+Lemon, ginger, honey tea;+;60;Чай с лимоном и имбирём
+Herbal tea;+;50;Цветочный чай
+Black coffee;+;50;Чёрный кофе
+Milk coffee;+;50;Кофе с молоком
+Masala coffee;+;50;Масала кофе
+Kombucha;+;50;Комбуча
+Cocoa;+;50;Какао
+Banana milk shake;+;80;Банана-шейк на молоке
+Banana coconut milk shake;+;130;Банана-шейк на кокосовом молоке
