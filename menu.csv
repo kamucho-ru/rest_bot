@@ -37,7 +37,7 @@ Lard per 100g; -;130;Копчёное сало, за 100 гр.
 Bacon per 100g; -;160;Копчёный бекон, за 100 гр.
 Ribs per 100g; -;150;Копчёный ребрышки, за 100 гр.
 Soups;;;Супы
-Tomatoe cream soup;+;180;Томатный крем-суп
+Tomato cream soup;+;180;Томатный крем-суп
 mushroom cream soup;+;180;Грибной крем-суп
 Borsh w tofu; +;180;Борщ с тофу
 Borsh w chicken; -;180;Борщ с курицей
@@ -47,7 +47,7 @@ Chalop w tofu;+;180;Чалоп с тофу
 Chalop w chicken;;180;Чалоп с курицей
 Pea soup w tofu;+;200;Гороховый суп с тофу
 Pea soup w chicken;;200;Гороховый суп с курицей
-Soup on pork ribs from chief;;250;Суп на свинных рёбрышках, от шефа
+Soup with pork ribs from chief;;250;Суп на свинных рёбрышках, от шефа
 Chicken soup;;180;Куриный суп
 Pumpkin soup;+;180;Тыквенный суп
 Salads;;;Салаты
