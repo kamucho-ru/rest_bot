@@ -18,10 +18,10 @@ Belyash (chicken); -;110;Беляш с курицей
 Hychin (potatoe & cheese agydhe);+;150;Хычины с адыгейским сыром и картофельным пюре
 South-asian cuisine;;;Южно-азиатская кухня
 Rice plain;+;60;Варёный рис
-fried rice;+;70;обжареный рис
-fried rice w eggs;+;120;обжареный рис с яйцами
-fried rice w chicken; -;160;обжареный рис с курицей
-fried rice w vegetables;+;170;обжареный рис с овощами
+Fried rice;+;70;Обжареный рис
+Fried rice w eggs;+;120;Обжареный рис с яйцами
+Fried rice w chicken; -;160;Обжареный рис с курицей
+Fried rice w vegetables;+;170;Обжареный рис с овощами
 Dal rice;+;160;Дал с рисом
 Chilli paneer;+;140;Панир в соусе чили
 Chilli chicken; -;150;Курица в соусе чили
@@ -38,7 +38,7 @@ Bacon per 100g; -;160;Копчёный бекон, за 100 гр.
 Ribs per 100g; -;150;Копчёный ребрышки, за 100 гр.
 Soups;;;Супы
 Tomato cream soup;+;180;Томатный крем-суп
-mushroom cream soup;+;180;Грибной крем-суп
+Mushroom cream soup;+;180;Грибной крем-суп
 Borsh w tofu; +;180;Борщ с тофу
 Borsh w chicken; -;180;Борщ с курицей
 Okroshka w tofu;+;180;Окрошка с тофу

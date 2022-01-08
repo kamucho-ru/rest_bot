@@ -49,8 +49,8 @@ while l:
 # print('## this is translate dict')
 # print(''.join([f'{k}:{translations[k]}' for k in translations]))
 
-# menu = {
-#     'Full menu': menu,
-#     'Veg menu': veg_menu,
-#     'Meat menu': meat_menu,
-# }
+menu = {
+    'Full menu': menu,
+    'Veg menu': veg_menu,
+    'Meat menu': meat_menu,
+}

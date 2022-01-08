@@ -21,6 +21,20 @@ curr_menu = {
     # 'user_id': 'smth'
 }
 
+menu_hash = {
+    # str( hash( 'Full menu:drinks:...') ): 'Full menu:drinks:...',
+}
+
+
+def get_menu_hash(path):
+    # create hash for buttons text instead of full menu string
+    global menu_hash
+    _hash = str(hash(path))
+    if _hash not in menu_hash:
+        menu_hash[_hash] = path
+    return _hash
+
+
 # order_type
 REST = 'REST'
 AWAY = 'AWAY'
@@ -181,17 +195,19 @@ def show_menu(message, show='menu'):
 
         def add_menu_buttons(submenu_data, prev_path):
             for i in submenu_data:
+                path = get_menu_hash(prev_path + i)
                 if isinstance(submenu_data[i], list):
                     template_text = '{} / {}'
                     name = get_translation(i, message.chat.id)
                     text_ = template_text.format(name, submenu_data[i][2])
-                    callback_ = 'open_item_' + prev_path + i  # for showing product info
-                    callback_ = 'order_' + prev_path + i
+                    callback_ = 'open_item_' + path  # for showing product info
+                    callback_ = 'order_' + path
                 else:
                     text_ = get_translation(i, message.chat.id)
-                    callback_ = 'open_menu_' + prev_path + i
+                    callback_ = 'open_menu_' + path
 
                 item_key = types.InlineKeyboardButton(text=text_, callback_data=callback_)
+                logger(f'::add "{text_}", callback "{callback_}"')
                 keyboard.add(item_key)
 
         if current:
@@ -367,12 +383,12 @@ def callback_worker(call):
 
         elif call.data.startswith('open_menu_'):
             # show submenu
-            curr_menu[call.message.chat.id] = call.data[10:]
+            curr_menu[call.message.chat.id] = menu_hash[call.data[10:]]
 
-        elif call.data.startswith('open_item_'):
-            # show product info
-            show_type = 'product'
-            curr_menu[call.message.chat.id] = call.data[10:]
+        # elif call.data.startswith('open_item_'):
+        #     # show product info
+        #     show_type = 'product'
+        #     curr_menu[call.message.chat.id] = call.data[10:]
 
         elif call.data == 'order_proceed':
             show_type = 'cart'
@@ -460,17 +476,18 @@ def callback_worker(call):
             delivery = delivery_map.get(current_cart['order_type'])
             pay_type = 'Cash' if call.data == 'order_proceed_cash' else 'PhonePe'
             comments = ''  # '\nКомментарий
-            bot.send_message(
-                managers[0],
-                text='Новый заказ от @{} ({}):\n{}, {}\n{}{}'.format(
-                    call.message.chat.username,
-                    call.message.chat.id,
-                    delivery,
-                    pay_type,
-                    cart_text,
-                    comments,
-                ),
-            )
+            for m in managers:
+                bot.send_message(
+                    m,
+                    text='New order from @{} ({}):\n{}, {}\n{}{}'.format(
+                        call.message.chat.username,
+                        call.message.chat.id,
+                        delivery,
+                        pay_type,
+                        cart_text,
+                        comments,
+                    ),
+                )
             m_ = bot.send_message(
                 call.message.chat.id,
                 text=get_translation(
@@ -492,12 +509,13 @@ def callback_worker(call):
                 )
 
         elif call.data.startswith('order_'):
-            ordered_item = get_concrete_data(call.data[6:])
-            name = call.data.split(':')[-1]
+            full_path = menu_hash[call.data[6:]]
+            ordered_item = get_concrete_data(full_path)
+            name = full_path.split(':')[-1]
             content = ordered_item
             if name not in current_cart['cart']:
                 content.append(1)  # amount
-                content.append(call.data[6:])  # full path
+                content.append(full_path)  # full path
                 current_cart['cart'][name] = content
             else:
                 current_cart['cart'][name][3] += 1
