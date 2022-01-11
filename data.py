@@ -12,10 +12,10 @@ translations = {
         '{} [{}] * {} = {} rs.': '{} [{}] * {} = {} rs.',
         '<< back': '<< Назад',
         'Please select ': 'Сделайте ваш выбор ',
-        'Select positions for delete or proceed to order': 'Выберите позиции для удаления или перейдите к оформлению заказа',
+        'Select positions to delete or proceed to order': 'Выберите позиции для удаления или перейдите к оформлению заказа',
         'Proceed to order': 'Перейти к оформлению заказа',
-        'Order at restaurant': 'Order at restaurant',
-        'Takeaway from restaurant': 'Takeaway from restaurant',
+        'Proceed at the restaurant': 'Продолжить',
+        'Wish to takeaway': 'Взять с собой',
         'Delivery': 'Доставка',
         'Go to top menu': 'Вернуться в главное меню',
         'Choose order type': 'Choose order type',
@@ -29,6 +29,7 @@ translations = {
     'hin': {},
 }
 
-from data_loader import menu, trans_rus
+from data_loader import menu, trans_rus  # noqa
+
 
 translations['rus'].update(trans_rus)

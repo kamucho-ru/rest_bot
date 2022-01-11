@@ -1,5 +1,5 @@
 f = open('menu.csv', 'r')
-l = f.readline()
+fileline = f.readline()
 
 menu = {}
 veg_menu = {}
@@ -15,8 +15,8 @@ current_section = None
 
 # print('## Main menu')
 # print('menu = {')
-while l:
-    row = l.split(';')
+while fileline:
+    row = fileline.split(';')
 
     if not row[2]:
         current_section = row[0]
@@ -27,11 +27,7 @@ while l:
     else:
         is_veg = True if '+' in row[1] else False
         is_drinks = True if current_section == 'Drinks' else False
-        product = [
-            is_veg,
-            'picture_url',
-            row[2],
-        ]
+        product = [is_veg, 'picture_url', row[2]]
         menu[current_section][row[0]] = product
         if is_veg or is_drinks:
             veg_menu[current_section][row[0]] = product
@@ -43,7 +39,7 @@ while l:
     if row[0] not in trans_rus:
         trans_rus[row[0]] = row[3]
 
-    l = f.readline()
+    fileline = f.readline()
 
 
 # print('## this is translate dict')
