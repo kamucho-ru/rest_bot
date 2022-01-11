@@ -12,10 +12,9 @@ Pasta prawns; -;250;Паста с креветками
 Dumplings (potatoe & mushrooms);+;210;Пельмени (картошка с грибами)
 Dumplings (potatoe & mushrooms & tofu);+;230;Пельмени (тофу и картошка с грибами)
 Dumplings (potatoe & mushrooms & chicken); -;230;Пельмени (курица и картошка с грибами)
-Belyash (veg);+;70;Беляш овощной
-Belyash (potatoe & mushrooms);+;70;Беляш с картошкой и грибами
-Belyash (chicken); -;110;Беляш с курицей
-Hychin (potatoe & cheese agydhe);+;150;Хычины с адыгейским сыром и картофельным пюре
+Belyash (veg);+;120;Беляш овощной
+Belyash (potatoe & mushrooms);+;120;Беляш с картошкой и грибами
+Belyash (chicken); -;140;Беляш с курицей
 South-asian cuisine;;;Южно-азиатская кухня
 Rice plain;+;60;Варёный рис
 Fried rice;+;70;Обжареный рис
@@ -106,15 +105,14 @@ Parota egg roll chicken;;140;Парота ролл с яйцами и куриц
 Pakoda Cheese;+;150;Панир в кляре
 Pumpkin porrige;+;140;Тыквенная каша
 Drinks;;;Напитки
-Black tea;+;50;Чёрный чай
-Milk tea;+;50;Чай с молоком
-Masala tea;+;50;Масала чай
+Black tea;+;60;Чёрный чай
+Milk tea;+;70;Чай с молоком
+Masala tea;+;70;Масала чай
 Lemon, ginger, honey tea;+;60;Чай с лимоном и имбирём
-Herbal tea;+;50;Цветочный чай
-Black coffee;+;50;Чёрный кофе
-Milk coffee;+;50;Кофе с молоком
-Masala coffee;+;50;Масала кофе
-Kombucha;+;50;Комбуча
-Cocoa;+;50;Какао
+Herbal tea;+;70;Цветочный чай
+Black coffee;+;80;Чёрный кофе
+Milk coffee;+;80;Кофе с молоком
+Masala coffee;+;90;Масала кофе
+Kombucha;+;70;Комбуча
 Banana milk shake;+;80;Банана-шейк на молоке
 Banana coconut milk shake;+;130;Банана-шейк на кокосовом молоке

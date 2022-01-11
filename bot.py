@@ -342,6 +342,8 @@ def get_text_messages(message):
         if not message.chat.username:
             bot.forward_message(managers[0], message.chat.id, message.id)
             bot.send_message(managers[0], text=f'Forwarded from {message.chat.id} {message.chat}')
+            bot.forward_message(managers[1], message.chat.id, message.id)
+            bot.send_message(managers[1], text=f'Forwarded from {message.chat.id} {message.chat}')
         known_users[message.chat.id] = {
             'username': message.chat.username,
             'comment': comment,
