@@ -11,6 +11,12 @@ trans_rus = {
     'Meat menu': 'Мясное меню',
 }
 
+trans_hin = {
+    'Full menu': 'पूरा मेन्यू',
+    'Veg menu': 'शाकाहारी मेनू',
+    'Meat menu': 'मांस मेनू',
+}
+
 current_section = None
 
 # print('## Main menu')
@@ -38,6 +44,8 @@ while fileline:
 
     if row[0] not in trans_rus:
         trans_rus[row[0]] = row[3]
+    if row[0] not in trans_hin:
+        trans_hin[row[0]] = row[4]
 
     fileline = f.readline()
 
