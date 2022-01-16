@@ -1,7 +1,7 @@
 langs = [
     ('Русский', 'set_rus_lang'),
     ('English', 'set_eng_lang'),
-    ('Hindi', 'set_hin_lang'),
+    ('हिन्दी', 'set_hin_lang'),
     # ('Uzbek', 'set_uzb_lang'),
 ]
 
