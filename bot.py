@@ -4,7 +4,18 @@ from telebot import types
 from data import langs, menu, translations  # noqa
 from settings import DEBUG, managers, token  # noqa
 
-# searate carts for users
+
+# todo
+# /тейкэвей добавить ссылку на мозогао
+# При выборе доставки спросить локацию
+# При выборе PhonePe вернуть ссылку для оплаты (с суммой?)
+# При заказе - повторить список позиций
+# Языки и переводы!!
+# Фото и подробности блюд
+# добавить ведж меню
+# загляните так же в "напитки" <- показывать после добавления в корзину
+
+# searate data for users
 cart = {
     # 'user_id': {
     #     'cart': {},
@@ -205,16 +216,14 @@ def show_menu(message, show='menu'):
                     callback_ = 'open_menu_' + path
 
                 item_key = types.InlineKeyboardButton(text=text_, callback_data=callback_)
-                logger(f'::add "{text_}", callback "{callback_}"')
+                logger(f'::adding "{text_}", callback "{callback_}"')
                 keyboard.add(item_key)
 
         if current:
-            keyboard.add(
-                types.InlineKeyboardButton(
-                    text=get_translation('Go to top menu', message.chat.id),
-                    callback_data='open_menu',
-                )
-            )
+            text_ = get_translation('Go to top menu', message.chat.id)
+            callback_ = 'open_menu'
+            logger(f'::adding "{text_}", callback "{callback_}"')
+            keyboard.add(types.InlineKeyboardButton(text=text_, callback_data=callback_))
         data_ = get_concrete_data(current)
 
         if isinstance(data_, dict):
@@ -232,15 +241,17 @@ def show_menu(message, show='menu'):
             name = get_translation(c, message.chat.id)
             amount = str(current_cart['cart'][c][3])
             total = str(int(current_cart['cart'][c][2]) * int(current_cart['cart'][c][3]))
-            item_key = types.InlineKeyboardButton(
-                text=template_text.format(name, amount, total),
-                callback_data='remove_order_{}'.format(current_cart['cart'][c][4]),
-            )
+
+            text_ = template_text.format(name, amount, total)
+            callback_ = 'remove_order_{}'.format(get_menu_hash(current_cart['cart'][c][4]))
+            logger(f'::adding "{text_}", callback "{callback_}"')
+            item_key = types.InlineKeyboardButton(text=text_, callback_data=callback_)
+
             keyboard.add(item_key)
-        item_key = types.InlineKeyboardButton(
-            text=get_translation('Proceed to order', message.chat.id),
-            callback_data='order_proceed_2',
-        )
+        text_ = get_translation('Proceed to order', message.chat.id)
+        callback_ = 'order_proceed_2'
+        logger(f'::adding "{text_}", callback "{callback_}"')
+        item_key = types.InlineKeyboardButton(text=text_, callback_data=callback_)
         keyboard.add(item_key)
 
     elif show == 'product':
@@ -258,19 +269,19 @@ def show_menu(message, show='menu'):
         # todo need to keep item's messages while changing count of items
 
         keyboard = types.InlineKeyboardMarkup()
-        item_key = types.InlineKeyboardButton(
-            text=get_translation('Add 1', message.chat.id),
-            callback_data='order_' + curr_menu.get(message.chat.id),
-        )
+        text_ = get_translation('Add 1', message.chat.id)
+        callback_ = 'order_' + curr_menu.get(message.chat.id)
+        logger(f'::adding "{text_}", callback "{callback_}"')
+        item_key = types.InlineKeyboardButton(text=text_, callback_data=callback_)
         keyboard.add(item_key)
 
         for i in current_cart['cart']:
             if current_cart['cart'][i][0] == data[0] and current_cart['cart'][i][2] == data[2]:
                 if current_cart['cart'][i][3] > 0:
-                    item_key = types.InlineKeyboardButton(
-                        text=get_translation('Remove 1', message.chat.id),
-                        callback_data='remove_order_' + curr_menu.get(message.chat.id),
-                    )
+                    text_ = get_translation('Remove 1', message.chat.id)
+                    callback_ = 'remove_order_' + get_menu_hash(curr_menu.get(message.chat.id))
+                    logger(f'::adding "{text_}", callback "{callback_}"')
+                    item_key = types.InlineKeyboardButton(text=text_, callback_data=callback_)
                     keyboard.add(item_key)
 
     else:  # if show == 'menu':
@@ -283,22 +294,22 @@ def show_menu(message, show='menu'):
         for c in current_cart['cart']:
             cart_items += int(current_cart['cart'][c][3])
             cart_price += int(current_cart['cart'][c][3]) * int(current_cart['cart'][c][2])
-        item_key = types.InlineKeyboardButton(
-            text=get_translation('Cart: {} items = {} rs.', message.chat.id).format(
-                cart_items, cart_price
-            ),
-            callback_data='order_proceed',
+        text_ = get_translation('Cart: {} items = {} rs.', message.chat.id).format(
+            cart_items, cart_price
         )
+        callback_ = 'order_proceed'
+        logger(f'::adding "{text_}", callback "{callback_}"')
+        item_key = types.InlineKeyboardButton(text=text_, callback_data=callback_)
         keyboard.add(item_key)
 
     question = get_translation('Please select ', message.chat.id)
 
     # Назад или сразу полное меню
     if curr_menu.get(message.chat.id):
-        item_key = types.InlineKeyboardButton(
-            text=get_translation('<< back', message.chat.id),
-            callback_data='go_back' if show == 'menu' else 'open_menu_',
-        )
+        text_ = get_translation('<< back', message.chat.id)
+        callback_ = 'go_back' if show == 'menu' else 'open_menu_'
+        logger(f'::adding "{text_}", callback "{callback_}"')
+        item_key = types.InlineKeyboardButton(text=text_, callback_data=callback_)
         keyboard.add(item_key)
         question = ' > '.join(
             [
@@ -350,6 +361,8 @@ def get_text_messages(message):
         curr_menu[message.chat.id] = None
     elif message.text == '/clear':
         reset_settings(message.chat.id)
+    # elif message.text == '/feedback':
+    #     todo receive a message from client and send it to manager
     else:
         current_cart = get_current_cart(message.chat.id)
         current_cart['comments'].append(message.text)
@@ -412,7 +425,7 @@ def callback_worker(call):
         # remove product from cart
         elif call.data.startswith('remove_order_') and current_cart['cart']:
             # removed_item = get_concrete_data(call.data[13:])
-            name = call.data.split(':')[-1]
+            name = menu_hash[call.data[13:]].split(':')[-1]
             current_cart['cart'][name][3] -= 1
             if current_cart['cart'][name][3] <= 0:
                 del current_cart['cart'][name]
@@ -446,16 +459,16 @@ def callback_worker(call):
             '''
             keyboard = types.InlineKeyboardMarkup()
 
-            item_key = types.InlineKeyboardButton(
-                text=get_translation('Proceed at the restaurant', call.message.chat.id),
-                callback_data='order_proceed_restaurant',
-            )
+            text_ = get_translation('Proceed at the restaurant', call.message.chat.id)
+            callback_ = 'order_proceed_restaurant'
+            logger(f'::adding "{text_}", callback "{callback_}"')
+            item_key = types.InlineKeyboardButton(text=text_, callback_data=callback_)
             keyboard.add(item_key)
 
-            item_key = types.InlineKeyboardButton(
-                text=get_translation('Wish to takeaway', call.message.chat.id),
-                callback_data='order_proceed_takeaway',
-            )
+            text_ = get_translation('Wish to takeaway', call.message.chat.id)
+            callback_ = 'order_proceed_takeaway'
+            logger(f'::adding "{text_}", callback "{callback_}"')
+            item_key = types.InlineKeyboardButton(text=text_, callback_data=callback_)
             keyboard.add(item_key)
 
             # item_key = types.InlineKeyboardButton(
@@ -470,9 +483,10 @@ def callback_worker(call):
             # )
             # keyboard.add(item_key)
 
-            item_key = types.InlineKeyboardButton(
-                text=get_translation('<< back', call.message.chat.id), callback_data='open_menu_'
-            )
+            text_ = get_translation('<< back', call.message.chat.id)
+            callback_ = 'open_menu_'
+            logger(f'::adding "{text_}", callback "{callback_}"')
+            item_key = types.InlineKeyboardButton(text=text_, callback_data=callback_)
             keyboard.add(item_key)
 
             text = get_translation(

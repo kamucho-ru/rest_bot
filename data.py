@@ -50,7 +50,7 @@ translations = {
     },
 }
 
-from data_loader import menu, trans_rus, trans_hin  # noqa
+from data_loader import menu, trans_hin, trans_rus  # noqa
 
 
 translations['rus'].update(trans_rus)
